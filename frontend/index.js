@@ -8,11 +8,11 @@
 
     var $gamesCart = doc.querySelector('[data-js="games-cart"]');
 
-    var $gameValue = doc.querySelector('[data-js="games-value"]');
-    var gamesPriceTotal = 0;
-
     var $divContainer = doc.createElement('div');
     $divContainer.setAttribute('class', 'game-in-cart-container');
+
+    var $gameValue = doc.querySelector('[data-js="games-value"]');
+    var gamesPriceTotal = 0;
 
     var $buttonCompleteGame = doc.querySelector('[data-js="btn-complete-game"]');
     var $buttonClearGame = doc.querySelector('[data-js="btn-clear-game"]');
@@ -272,6 +272,17 @@
 
               $gameValue.innerHTML = '';
               $gameValue.innerHTML = gamesPriceTotal;
+
+              var $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
+
+              Array.prototype.forEach.call($buttonsRemoveGame, function(button) {
+                button.onclick = function() {
+                  var buttonParent = button.parentNode;
+
+                  $gamesCart.removeChild(buttonParent);
+                  htmlGame = $gamesCart.innerHTML;
+                }
+              });
             break;
           case 'megaSena':
             if(
@@ -301,6 +312,17 @@
 
             $gameValue.innerHTML = '';
             $gameValue.innerHTML = gamesPriceTotal;
+
+            var $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
+
+              Array.prototype.forEach.call($buttonsRemoveGame, function(button,index) {
+                button.onclick = function() {
+                  var buttonParent = button.parentNode;
+
+                  $gamesCart.removeChild(buttonParent);
+                  htmlGame = $gamesCart.innerHTML;
+                }
+              });
             break;
           case 'quina':
             if(
@@ -330,6 +352,17 @@
 
               $gameValue.innerHTML = '';
               $gameValue.innerHTML = gamesPriceTotal;
+
+              var $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
+
+              Array.prototype.forEach.call($buttonsRemoveGame, function(button,index) {
+                button.onclick = function() {
+                  var buttonParent = button.parentNode;
+
+                  $gamesCart.removeChild(buttonParent);
+                  htmlGame = $gamesCart.innerHTML;
+                }
+              });
             break;
           default: 
             console.log('addCart press');
@@ -349,38 +382,6 @@
         });
         numbersSelected = [];
       },
-
-      completeGame: function() {
-        switch(typeGame) {
-          case 'lotoFacil':
-            if(numbersSelected === undefined || numbersSelected.length === 0) {
-              var ids = [];
-              
-              while(ids.length < lotoFacilData.range) {
-                var random = Math.floor(Math.random() * 25);
-
-                if (ids.indexOf(random) == -1) {
-                  ids.push(random);
-                }
-              }
-
-              var $numbersButtons = doc.querySelectorAll(`.btn-number`);
-
-              Array.prototype.map.call($numbersButtons, function(value) {
-                
-              });
-            }
-          break;
-          case 'megaSena':
-          
-          break;
-          case 'quina':
-
-          break;
-          default: 
-            return;
-        }
-      }
     }
   }
 
