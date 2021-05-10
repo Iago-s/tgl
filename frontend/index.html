@@ -30,29 +30,32 @@
       <div class="games-container">
         <h3 class="title left">NEW BET <span class="subtitle">FOR MEGA-SENA</span></h3>
         <p class="description">Choose a game</p>
-        <button class="btn-game">Lotofácil</button>
-        <button class="btn-game">Mega Sena</button>
-        <button class="btn-game">Lotomania</button>
+        <button class="btn-game" data-js="btn-lotofacil"></button>
+        <button class="btn-game" data-js="btn-megasena"></button>
+        <button class="btn-game" data-js="btn-quina"></button>
         <p class="description">Fill your bet</p>
-        <p class="description normal">
-          Mark as many numbers as you want up to a maximum of 50. Win by hitting 
-          15, 16, 17, 18, 19, 20 or none of the 20 numbers drawn.
-        </p>
+        <div data-js="handle-games">
+          <p class="description normal" data-js="game-description"></p>
+          <div data-js="game-numbers" class="game-numbers"></div>
+        </div>
         <div class="btn-actions-container">
           <div>
-            <button class="btn-action btn-action-complete-game">Complete game</button>
-            <button class="btn-action btn-action-clear-game">Complete game</button>
+            <button class="btn-action btn-action-complete-game" data-js="btn-complete-game">Complete game</button>
+            <button class="btn-action btn-action-clear-game" data-js="btn-clear-game">Clear game</button>
           </div>
-          <button class="btn-action btn-action-add-cart"><i class="material-icons-outlined">arrow_forward</i>Add to card</button>
+          <button class="btn-action btn-action-add-cart" data-js="btn-add-cart"><i class="material-icons-outlined">shopping_cart</i>Add to card</button>
         </div>
       </div>
 
       <div class="cart-container">
         <div class="cart">
           <h3 class="title">CART</h3>
+          <div data-js="games-cart" class="games-cart">
+
+          </div>
           
           <div class="total-btn-save-container">
-            <h3 class="title">CART <span class="subtitle">TOTAL: R$70,00</span></h3>
+            <h3 class="title">CART <span class="subtitle" >TOTAL R$ <span data-js="games-value"></span></h3>
             <button class="btn-save">Save <i class="material-icons-outlined">arrow_forward</i></button>
           </div>
         </div>

@@ -102,12 +102,39 @@ main {
   border-width: 2px;
   padding: 5px 20px;
   margin: 20px 0px;
+  background-color: transparent;
 }
 
 .description {
   font-size: 17px;
   font-weight: bold;
   color: var(--gray-light);
+}
+
+.game-numbers {
+  padding: 20px 0;
+}
+
+.btn-number {
+  width: 40px;
+  height: 40px;
+  margin: 2px;
+  color: var(--white);
+  font-weight: bold;
+  border: 1px solid var(--blue-light);
+  border-radius: 50%;
+  background-color: var(--blue-light);
+}
+
+.btn-number-actived {
+  width: 40px;
+  height: 40px;
+  margin: 2px;
+  color: var(--white);
+  font-weight: bold;
+  border: 1px solid var(--green-light);
+  border-radius: 50%;
+  background-color: var(--green-light);
 }
 
 .normal {
@@ -158,10 +185,57 @@ main {
   flex-direction: column;
   justify-content: space-between;
 
-
   border: 1px solid var(--gray-ultra-light);
   border-radius: 10px;
   background-color: var(--white);
+}
+
+.games-cart {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.game-in-cart-container {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  margin-bottom: 10px;
+}
+
+.btn-trash-cart {
+  width: 20%;
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  color: var(--gray-icons);
+}
+
+.numbers-game-container {
+  width: 80%;
+  padding: 10px;
+
+  font-size: 15px;
+  color: var(--gray-light);
+
+  border-left-width: 5px;
+  border-left-style: solid;
+  border-radius: 5px;
+}
+
+.game-numbers-cart, .game-name-cart {
+  padding: 2px 0;
+}
+
+.game-name-cart {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.game-value-cart {
+  font-size: 16px;
+  font-weight: normal;
+  color: var(--gray-light);
 }
 
 .total-btn-save-container {
@@ -186,7 +260,7 @@ main {
 .title {
   font-size: 24px;
   color: var(--gray);
-  margin: 20px 10px;
+  margin: 20px;
 }
 
 .subtitle {
@@ -202,6 +276,7 @@ main {
 footer {
   display: flex;
   justify-content: center;
+  align-items: center;
   border-top: 2px solid #EBEBEB;
   font-size: 15px;
   color: var(--gray);
