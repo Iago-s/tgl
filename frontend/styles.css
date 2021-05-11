@@ -101,7 +101,7 @@ main {
   border-radius: 100px;
   border-width: 2px;
   padding: 5px 20px;
-  margin: 20px 0px;
+  margin: 20px 10px 20px 0px;
   background-color: transparent;
 }
 
@@ -261,6 +261,13 @@ main {
   font-size: 24px;
   color: var(--gray);
   margin: 20px;
+}
+
+.feedback {
+  width: 100%;
+  margin-left: 20px;
+  font-size: 20px;
+  color: var(--gray);
 }
 
 .subtitle {

@@ -2,9 +2,12 @@
   function app() {
     var ajax = new XMLHttpRequest();
 
-    var lotoFacilData;
-    var megaSenaData;
-    var quinaData;
+    var $gameButtons;
+    var games = [];
+    var $btnGames = document.querySelector('[data-js="buttons"]');
+    var $button;
+    var currentGame;
+    var $feedback = document.querySelector('[data-js="feedback"]');
 
     var $gameDescription = doc.querySelector('[data-js="game-description"]');
     var $gameNumbers = doc.querySelector('[data-js="game-numbers"');
@@ -17,23 +20,17 @@
     var $buttonClearGame = doc.querySelector('[data-js="btn-clear-game"]');
     var $buttonAddCart = doc.querySelector('[data-js="btn-add-cart"]');
 
-    var $buttonGameLotoFacil = doc.querySelector('[data-js="btn-lotofacil"]');
-    var $buttonGameMegaSena = doc.querySelector('[data-js="btn-megasena"]');
-    var $buttonGameQuina = doc.querySelector('[data-js="btn-quina"]');
-
-    var typeGame;
-    var numbersSelected;
+    var numbersSelected = [];
     var htmlGame = '';
     var gamesPriceTotal = 0;
 
     return {
       init: function() {
         this.gamesInfos();
-        this.handleGameChange();
         this.initEvents();
       },
 
-      gamesInfos: function() {
+      gamesInfos: async function() {
         ajax.open('GET', './games.json');
         ajax.send();
 
@@ -41,27 +38,33 @@
           if(ajax.readyState === 4 && ajax.status === 200) {
             var data = JSON.parse(ajax.responseText);
 
-            lotoFacilData = data.types[0];
-            megaSenaData = data.types[1];
-            quinaData = data.types[2];
+            data.types.map(function(value) {
+              games.push(value);
+            });
 
-            $buttonGameLotoFacil.textContent =  lotoFacilData.type;
-            $buttonGameLotoFacil.style.background = lotoFacilData.color;
-            $buttonGameLotoFacil.style.borderColor = lotoFacilData.color;
-            $buttonGameLotoFacil.style.color = '#FFF';
-            
-            $buttonGameMegaSena.textContent =  megaSenaData.type;
-            $buttonGameMegaSena.style.borderColor = megaSenaData.color;
+            games.map(function(value, index) {
+              $button = doc.createElement('button');
+              
+              $button.style.borderColor = value.color;
+              $button.setAttribute('class', 'btn-game');
+              $button.setAttribute('value', `${index}`);
+              $button.textContent = value.type;
 
-            $buttonGameQuina.textContent =  quinaData.type;
-            $buttonGameQuina.style.borderColor = quinaData.color;
+              if(!index) {
+                $button.style.background = value.color;
+                $button.style.color = '#FFF';
+              }
 
-            $gameDescription.textContent = lotoFacilData.description;
-            
-            typeGame = 'lotoFacil';
+              $btnGames.appendChild($button);
+            });
 
-            //Adiciona os buttons na DOM
-            for(let i = 0; i < lotoFacilData.range; i++) {
+            $gameButtons = doc.querySelectorAll('.btn-game');
+
+            //Defaul game lotofácil
+            currentGame = games[0];
+
+            $gameDescription.textContent = currentGame.description;
+            for(let i = 0; i < currentGame.range; i++) {
               var $buttonNumber = doc.createElement('button');
               $buttonNumber.textContent = i + 1;
 
@@ -80,7 +83,7 @@
 
                 var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
 
-                $numbersSelected = Array.prototype.map.call($numbersSelected, function(value, index) {
+                $numbersSelected = Array.prototype.map.call($numbersSelected, function(value) {
                   return value.id;  
                 });
 
@@ -89,155 +92,51 @@
 
               $gameNumbers.appendChild($buttonNumber);
             }
-          }
-        });
-      },
 
-      //Mudança de jogo
-      handleGameChange: function() {
-        //Loto fácil
-        $buttonGameLotoFacil.addEventListener('click', function() {
-          $buttonGameMegaSena.style.background = 'transparent';
-          $buttonGameMegaSena.style.color = '#000';
+            Array.prototype.forEach.call($gameButtons, function(value) {
+              value.addEventListener('click', function(event) {
+                currentGame = games[event.target.value];
 
-          $buttonGameQuina.style.background = 'transparent';
-          $buttonGameQuina.style.color = '#000';
+                $gameDescription.textContent = currentGame.description;
 
-          $buttonGameLotoFacil.style.background = lotoFacilData.color;
-          $buttonGameLotoFacil.style.color = '#FFF';
+                Array.prototype.forEach.call($gameButtons, function(value) {
+                  value.style.background = 'transparent';
+                  value.style.color = '#000';
+                });
 
-          $gameDescription.innerHTML = '';
-          $gameDescription.innerHTML = lotoFacilData.description;
+                value.style.background = currentGame.color;
+                value.style.color = '#FFF';
+                $gameNumbers.innerHTML = '';
 
-          $gameNumbers.innerHTML = '';
-          typeGame = 'lotoFacil';
-          numbersSelected = [];
-
-          //Adiciona botoes na DOM
-          for(var i = 0; i < lotoFacilData.range; i++) {
-            var $buttonNumber = doc.createElement('button');
-            $buttonNumber.textContent = i + 1;
-
-            $buttonNumber.setAttribute('class', 'btn-number');
-            $buttonNumber.setAttribute('id', i + 1);
-
-            $buttonNumber.addEventListener('click', function(event) {
-              var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
-
-              if($buttonPress.classList.contains('btn-number-actived')) {
-                $buttonPress.classList.remove('btn-number-actived');
-              } else {
-                $buttonPress.classList.add('btn-number-actived');
-              }
-
-              var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
-
-              $numbersSelected = Array.prototype.map.call($numbersSelected, function(value, index) {
-                return value.id;  
+                for(var i = 0; i < currentGame.range; i++) {
+                  var $buttonNumber = doc.createElement('button');
+                  $buttonNumber.textContent = i + 1;
+      
+                  $buttonNumber.setAttribute('class', 'btn-number');
+                  $buttonNumber.setAttribute('id', i + 1);
+      
+                  $buttonNumber.addEventListener('click', function(event) {
+                    var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
+      
+                    if($buttonPress.classList.contains('btn-number-actived')) {
+                      $buttonPress.classList.remove('btn-number-actived');
+                    } else {
+                      $buttonPress.classList.add('btn-number-actived');
+                    }
+      
+                    var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
+      
+                    $numbersSelected = Array.prototype.map.call($numbersSelected, function(value) {
+                      return value.id;  
+                    });
+      
+                    numbersSelected = $numbersSelected;
+                  });
+      
+                  $gameNumbers.appendChild($buttonNumber);
+                }
               });
-
-              numbersSelected = $numbersSelected;
             });
-
-            $gameNumbers.appendChild($buttonNumber);
-          }
-        });
-
-        //Mega sena
-        $buttonGameMegaSena.addEventListener('click', function() {
-          $buttonGameLotoFacil.style.background = 'transparent';
-          $buttonGameLotoFacil.style.color = '#000';
-
-          $buttonGameQuina.style.background = 'transparent';
-          $buttonGameQuina.style.color = '#000';
-
-          $buttonGameMegaSena.style.background = megaSenaData.color;
-          $buttonGameMegaSena.style.color = '#FFF';
-
-          $gameDescription.innerHTML = '';
-          $gameDescription.innerHTML = megaSenaData.description;
-
-          $gameNumbers.innerHTML = '';
-          typeGame = 'megaSena';
-          numbersSelected = [];
-
-          //Adiciona botões na DOM
-          for(let i = 0; i < megaSenaData.range; i++) {
-            var $buttonNumber = doc.createElement('button');
-            $buttonNumber.textContent = i + 1;
-
-            $buttonNumber.setAttribute('class', 'btn-number');
-            $buttonNumber.setAttribute('id', i + 1);
-
-            $buttonNumber.addEventListener('click', function(event) {
-              var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
-
-              if($buttonPress.classList.contains('btn-number-actived')) {
-                $buttonPress.classList.remove('btn-number-actived');
-              } else {
-                $buttonPress.classList.add('btn-number-actived');
-              }
-
-              var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
-
-              $numbersSelected = Array.prototype.map.call($numbersSelected, function(value, index) {
-                return value.id;  
-              });
-
-              numbersSelected = $numbersSelected;
-              typeGame = 'megaSena';
-            });
-
-            $gameNumbers.appendChild($buttonNumber);
-          }
-        });
-
-        //Quina
-        $buttonGameQuina.addEventListener('click', function() {
-          $buttonGameLotoFacil.style.background = 'transparent';
-          $buttonGameLotoFacil.style.color = '#000';
-
-          $buttonGameMegaSena.style.background = 'transparent';
-          $buttonGameMegaSena.style.color = '#000';
-
-          $buttonGameQuina.style.background = quinaData.color;
-          $buttonGameQuina.style.color = '#FFF';
-
-          $gameDescription.innerHTML = '';
-          $gameDescription.innerHTML = quinaData.description;
-
-          $gameNumbers.innerHTML = '';
-          typeGame = 'quina';
-          numbersSelected = [];
-
-          //Adiciona botões na DOM
-          for(let i = 0; i < quinaData.range; i++) {
-            var $buttonNumber = doc.createElement('button');
-            $buttonNumber.textContent = i + 1;
-
-            $buttonNumber.setAttribute('class', 'btn-number');
-            $buttonNumber.setAttribute('id', i + 1);
-
-            $buttonNumber.addEventListener('click', function(event) {
-              var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
-
-              if($buttonPress.classList.contains('btn-number-actived')) {
-                $buttonPress.classList.remove('btn-number-actived');
-              } else {
-                $buttonPress.classList.add('btn-number-actived');
-              }
-
-              var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
-
-              $numbersSelected = Array.prototype.map.call($numbersSelected, function(value, index) {
-                return value.id;  
-              });
-
-              numbersSelected = $numbersSelected;
-              typeGame = 'quina';
-            });
-
-            $gameNumbers.appendChild($buttonNumber);
           }
         });
       },
@@ -254,160 +153,67 @@
         var $buttonsRemoveGame;
         var buttonParent ;
 
-        switch(typeGame) {
-          case 'lotoFacil': 
-            if(
-              numbersSelected.length < lotoFacilData["max-number"] || 
-              numbersSelected.length > lotoFacilData["max-number"]
-            ) {
-              return alert('Para a loto fácil deve se escolher 15 números!');
-            }
-
-            htmlGame += `
-              <div class="game-in-cart-container">
-                <button class="btn-trash-cart"><i class="material-icons-outlined">delete</i></button>
-                <div class="numbers-game-container" style="border-left-color:${lotoFacilData.color};">
-                  <p class="game-numbers-cart">${numbersSelected.join()}</p>
-                  <p class="game-name-cart">${lotoFacilData.type} <span class="game-value-cart" data-js="game-price" id="${lotoFacilData.price}">R$ ${lotoFacilData.price}</span></p>
-                </div>
-              </div>`;
-
-            $gamesCart.innerHTML = '';
-            $gamesCart.innerHTML = htmlGame;
-
-            allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
-            gamesPriceTotal = 0;
-            Array.prototype.map.call(allGamesPrice, function(value) {
-              gamesPriceTotal += Number(value.id); 
-            });
-
-            $gameValue.innerHTML = '';
-            $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
-
-            $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
-
-            //Botão remover jogo
-            Array.prototype.forEach.call($buttonsRemoveGame, function(button) {
-              button.onclick = function() {
-                buttonParent = button.parentNode;
-
-                $gamesCart.removeChild(buttonParent);
-                htmlGame = $gamesCart.innerHTML;
-
-                allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
-                gamesPriceTotal = 0;
-                Array.prototype.map.call(allGamesPrice, function(value) {
-                  gamesPriceTotal += Number(value.id); 
-                });
-
-                $gameValue.innerHTML = '';
-                $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
-              }
-            });
-          break;
-          case 'megaSena':
-            if(
-              numbersSelected.length < megaSenaData["max-number"] || 
-              numbersSelected.length > megaSenaData["max-number"]
-            ) {
-              return alert('Para a mega deve se escolher 6 números!');
-            }
-
-            htmlGame += `
-              <div class="game-in-cart-container">
-                <button class="btn-trash-cart"><i class="material-icons-outlined">delete</i></button>
-                <div class="numbers-game-container" style="border-left-color:${megaSenaData.color};">
-                  <p class="game-numbers-cart">${numbersSelected.join()}</p>
-                  <p class="game-name-cart">${megaSenaData.type} <span class="game-value-cart" data-js="game-price" id="${megaSenaData.price}">R$ ${megaSenaData.price}</span></p>
-                </div>
-              </div>`;
-
-            $gamesCart.innerHTML = '';
-            $gamesCart.innerHTML = htmlGame;
-
-            allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
-            gamesPriceTotal = 0;
-            Array.prototype.map.call(allGamesPrice, function(value) {
-              gamesPriceTotal += Number(value.id); 
-            });
-
-            $gameValue.innerHTML = '';
-            $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
-
-            $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
-
-            //Botão remover jogo
-            Array.prototype.forEach.call($buttonsRemoveGame, function(button) {
-              button.onclick = function() {
-                buttonParent = button.parentNode;
-
-                $gamesCart.removeChild(buttonParent);
-                htmlGame = $gamesCart.innerHTML;
-
-                allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
-                gamesPriceTotal = 0;
-                Array.prototype.map.call(allGamesPrice, function(value) {
-                  gamesPriceTotal += Number(value.id); 
-                });
-
-                $gameValue.innerHTML = '';
-                $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
-              }
-            });
-          break;
-          case 'quina':
-            if(
-              numbersSelected.length < quinaData["max-number"] || 
-              numbersSelected.length > quinaData["max-number"]
-            ) {
-              return alert('Para a quina deve se escolher 5 números!');
-            }
-            
-            htmlGame += `
-              <div class="game-in-cart-container">
-                <button class="btn-trash-cart"><i class="material-icons-outlined">delete</i></button>
-                <div class="numbers-game-container" style="border-left-color:${quinaData.color};">
-                  <p class="game-numbers-cart">${numbersSelected.join()}</p>
-                  <p class="game-name-cart">${quinaData.type} <span class="game-value-cart" data-js="game-price" id="${quinaData.price}">R$ ${quinaData.price}</span></p>
-                </div>
-              </div>`;
-
-            $gamesCart.innerHTML = '';
-            $gamesCart.innerHTML = htmlGame;
-
-            allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
-            gamesPriceTotal = 0;
-            Array.prototype.map.call(allGamesPrice, function(value) {
-              gamesPriceTotal += Number(value.id); 
-            });
-
-            $gameValue.innerHTML = '';
-            $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
-
-            $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
-
-            //Botão remover jogo
-            Array.prototype.forEach.call($buttonsRemoveGame, function(button) {
-              button.onclick = function() {
-                buttonParent = button.parentNode;
-
-                $gamesCart.removeChild(buttonParent);
-                htmlGame = $gamesCart.innerHTML;
-
-                allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
-                gamesPriceTotal = 0;
-                Array.prototype.map.call(allGamesPrice, function(value) {
-                  gamesPriceTotal += Number(value.id); 
-                });
-
-                $gameValue.innerHTML = '';
-                $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
-              }
-            });
-          break;
-          default:
-          return;
+        if(
+          numbersSelected.length < currentGame["max-number"] || 
+          numbersSelected.length > currentGame["max-number"]
+        ) {
+          return alert(`Para a ${currentGame.type} deve se escolher ${currentGame["max-number"]} números!`);
         }
+
+        htmlGame += `
+          <div class="game-in-cart-container">
+            <button class="btn-trash-cart"><i class="material-icons-outlined">delete</i></button>
+            <div class="numbers-game-container" style="border-left-color:${currentGame.color};">
+              <p class="game-numbers-cart">${numbersSelected.join()}</p>
+              <p class="game-name-cart">${currentGame.type} 
+                <span class="game-value-cart" data-js="game-price" id="${currentGame.price}">
+                  ${currentGame.price.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'})}
+                </span>
+              </p>
+            </div>
+          </div>`;
+
+        $feedback.textContent = '';
+
+        $gamesCart.innerHTML = '';
+        $gamesCart.innerHTML = htmlGame;
+
+        allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
+        gamesPriceTotal = 0;
+        Array.prototype.map.call(allGamesPrice, function(value) {
+          gamesPriceTotal += Number(value.id); 
+        });
+
+        $gameValue.innerHTML = '';
+        $gameValue.innerHTML = gamesPriceTotal.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+
+        $buttonsRemoveGame = doc.getElementsByClassName(`btn-trash-cart`);
+
+        //Botão remover jogo
+        Array.prototype.forEach.call($buttonsRemoveGame, function(button) {
+          button.onclick = function() {
+            buttonParent = button.parentNode;
+
+            $gamesCart.removeChild(buttonParent);
+            htmlGame = $gamesCart.innerHTML;
+
+            allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
+            gamesPriceTotal = 0;
+            Array.prototype.map.call(allGamesPrice, function(value) {
+              gamesPriceTotal += Number(value.id); 
+            });
+
+            if(!gamesPriceTotal) {
+              $feedback.textContent = 'Faça seu primeiro jogo';
+            }
+
+            $gameValue.innerHTML = '';
+            $gameValue.innerHTML = gamesPriceTotal.toLocaleString('pt-br', {style: 'currency', currency: 'BRL'});
+          }
+        });
+
+        numbersSelected = [];
+        app().clearGame();
       },
 
       clearGame: function() {
@@ -428,67 +234,47 @@
         var ids = [];
         var random;
         var $numbersButtons;
+        var numbersRemaining  = 0;
 
-        switch(typeGame) {
-          case 'lotoFacil': 
-          if(numbersSelected === undefined || numbersSelected.length === 0) {
-            while(ids.length < lotoFacilData["max-number"]) {
-              random = Math.floor(Math.random() * lotoFacilData.range);
-
+        if(numbersSelected.length === 0) {
+          while(ids.length < currentGame["max-number"]) {
+            random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
               if (ids.indexOf(random) == -1) {
-                ids.push(random);
-              }
+              ids.push(random);
             }
-
-            $numbersButtons = doc.querySelectorAll(`.btn-number`);
-
-            ids.map(function(value) {
-              $numbersButtons[value].classList.add('btn-number-actived');
-            });
-            numbersSelected = ids;
-            ids = [];
           }
-          break;
-          case 'megaSena': 
-            if(numbersSelected === undefined || numbersSelected.length === 0) {
-              while(ids.length < megaSenaData["max-number"]) {
-                random = Math.floor(Math.random() * megaSenaData.range);
+          $numbersButtons = doc.querySelectorAll(`.btn-number`);
+          
+          ids.map(function(value) {
+            $numbersButtons[value].classList.add('btn-number-actived');
+          });
+          
+          numbersSelected = ids;
+          ids = [];
+        } else {
+          for(var i = 0; i < numbersSelected.length; i++) {
+            ids.push(parseInt(numbersSelected[i]));
+          }
 
-                if (ids.indexOf(random) == -1) {
-                  ids.push(random);
-                }
-              }
+          
 
-              $numbersButtons = doc.querySelectorAll(`.btn-number`);
-
-              ids.map(function(value) {
-                $numbersButtons[value].classList.add('btn-number-actived');
-              });
-              numbersSelected = ids;
-              ids = [];
+          while(numbersRemaining < (currentGame['max-number'] - numbersSelected.length)) {
+            random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
+            
+            if (ids.indexOf(random) == -1) {
+              ids.push(random);
+              numbersRemaining++;
             }
-          break;
-          case 'quina':
-            if(numbersSelected === undefined || numbersSelected.length === 0) {
-              while(ids.length < quinaData["max-number"]) {
-                random = Math.floor(Math.random() * quinaData.range);
+          }
 
-                if (ids.indexOf(random) == -1) {
-                  ids.push(random);
-                }
-              }
+          $numbersButtons = doc.querySelectorAll(`.btn-number`);
 
-              $numbersButtons = doc.querySelectorAll(`.btn-number`);
-
-              ids.map(function(value) {
-                $numbersButtons[value].classList.add('btn-number-actived');
-              });
-              numbersSelected = ids;
-              ids = [];
-            }
-          break;
-          default:
-          return;
+          ids.map(function(value) {
+            $numbersButtons[value-1].classList.add('btn-number-actived');
+          });
+          
+          numbersSelected = ids;
+          ids = [];
         }
       }
     }
