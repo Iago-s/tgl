@@ -4,10 +4,11 @@
 
     var $gameButtons;
     var games = [];
-    var $btnGames = document.querySelector('[data-js="buttons"]');
-    var $button;
     var currentGame;
-    var $feedback = document.querySelector('[data-js="feedback"]');
+    var htmlGame = '';
+    var $button;
+    var numbersSelected = [];
+    var gamesPriceTotal = 0;
 
     var $gameDescription = doc.querySelector('[data-js="game-description"]');
     var $gameNumbers = doc.querySelector('[data-js="game-numbers"');
@@ -15,14 +16,12 @@
     var $divContainer = doc.createElement('div');
     $divContainer.setAttribute('class', 'game-in-cart-container');
     var $gameValue = doc.querySelector('[data-js="games-value"]');
+    var $feedback = document.querySelector('[data-js="feedback"]');
 
     var $buttonCompleteGame = doc.querySelector('[data-js="btn-complete-game"]');
     var $buttonClearGame = doc.querySelector('[data-js="btn-clear-game"]');
     var $buttonAddCart = doc.querySelector('[data-js="btn-add-cart"]');
-
-    var numbersSelected = [];
-    var htmlGame = '';
-    var gamesPriceTotal = 0;
+    var $btnGames = document.querySelector('[data-js="buttons"]');
 
     return {
       init: function() {
@@ -239,7 +238,8 @@
         if(numbersSelected.length === 0) {
           while(ids.length < currentGame["max-number"]) {
             random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
-              if (ids.indexOf(random) == -1) {
+            
+            if (ids.indexOf(random) == -1) {
               ids.push(random);
             }
           }
@@ -255,8 +255,6 @@
           for(var i = 0; i < numbersSelected.length; i++) {
             ids.push(parseInt(numbersSelected[i]));
           }
-
-          
 
           while(numbersRemaining < (currentGame['max-number'] - numbersSelected.length)) {
             random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
