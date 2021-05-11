@@ -293,6 +293,15 @@
 
                 $gamesCart.removeChild(buttonParent);
                 htmlGame = $gamesCart.innerHTML;
+
+                allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
+                gamesPriceTotal = 0;
+                Array.prototype.map.call(allGamesPrice, function(value) {
+                  gamesPriceTotal += Number(value.id); 
+                });
+
+                $gameValue.innerHTML = '';
+                $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
               }
             });
           break;
@@ -334,6 +343,15 @@
 
                 $gamesCart.removeChild(buttonParent);
                 htmlGame = $gamesCart.innerHTML;
+
+                allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
+                gamesPriceTotal = 0;
+                Array.prototype.map.call(allGamesPrice, function(value) {
+                  gamesPriceTotal += Number(value.id); 
+                });
+
+                $gameValue.innerHTML = '';
+                $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
               }
             });
           break;
@@ -375,6 +393,15 @@
 
                 $gamesCart.removeChild(buttonParent);
                 htmlGame = $gamesCart.innerHTML;
+
+                allGamesPrice = doc.querySelectorAll('[data-js="game-price"]');
+                gamesPriceTotal = 0;
+                Array.prototype.map.call(allGamesPrice, function(value) {
+                  gamesPriceTotal += Number(value.id); 
+                });
+
+                $gameValue.innerHTML = '';
+                $gameValue.innerHTML = gamesPriceTotal.toFixed(2);
               }
             });
           break;
