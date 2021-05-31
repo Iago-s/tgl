@@ -96,6 +96,8 @@
               value.addEventListener('click', function(event) {
                 currentGame = games[event.target.value];
 
+                numbersSelected = [];
+
                 $gameDescription.textContent = currentGame.description;
 
                 Array.prototype.forEach.call($gameButtons, function(value) {
