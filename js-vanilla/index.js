@@ -2,6 +2,11 @@
   function app() {
     var ajax = new XMLHttpRequest();
 
+    var $modalContainer = doc.querySelector('[data-js="modal-container"]');
+    var $alertContainer = doc.querySelector('[data-js="modal-alert"]');
+    var $modalButton = doc.querySelector('[data-js="modal-button"]');
+    var $modalMessage = doc.querySelector('[data-js="modal-message"]');
+
     var $gameButtons;
     var games = [];
     var currentGame;
@@ -37,9 +42,7 @@
           if(ajax.readyState === 4 && ajax.status === 200) {
             var data = JSON.parse(ajax.responseText);
 
-            data.types.map(function(value) {
-              games.push(value);
-            });
+            data.types.map((value) => games.push(value));
 
             games.map(function(value, index) {
               $button = doc.createElement('button');
@@ -63,34 +66,39 @@
             currentGame = games[0];
 
             $gameDescription.textContent = currentGame.description;
-            for(let i = 0; i < currentGame.range; i++) {
-              var $buttonNumber = doc.createElement('button');
-              $buttonNumber.textContent = i + 1;
 
-              $buttonNumber.setAttribute('class', 'btn-number');
-              $buttonNumber.setAttribute('id', i + 1);
-
-              //Usuario escolhe um número
-              $buttonNumber.addEventListener('click', function(event) {
-                var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
-
-                if($buttonPress.classList.contains('btn-number-actived')) {
-                  $buttonPress.classList.remove('btn-number-actived');
-                } else {
-                  $buttonPress.classList.add('btn-number-actived');
-                }
-
-                var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
-
-                $numbersSelected = Array.prototype.map.call($numbersSelected, function(value) {
-                  return value.id;  
+            var addButtonsInDOM = () => {
+              for(let i = 0; i < currentGame.range; i++) {
+                var $buttonNumber = doc.createElement('button');
+                $buttonNumber.textContent = i + 1;
+  
+                $buttonNumber.setAttribute('class', 'btn-number');
+                $buttonNumber.setAttribute('id', i + 1);
+  
+                //Usuario escolhe um número
+                $buttonNumber.addEventListener('click', function(event) {
+                  var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
+  
+                  if($buttonPress.classList.contains('btn-number-actived')) {
+                    $buttonPress.classList.remove('btn-number-actived');
+                  } else {
+                    $buttonPress.classList.add('btn-number-actived');
+                  }
+  
+                  var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
+  
+                  $numbersSelected = Array.prototype.map.call($numbersSelected, function(value) {
+                    return value.id;  
+                  });
+  
+                  numbersSelected = $numbersSelected;
                 });
-
-                numbersSelected = $numbersSelected;
-              });
-
-              $gameNumbers.appendChild($buttonNumber);
+  
+                $gameNumbers.appendChild($buttonNumber);
+              }
             }
+
+            addButtonsInDOM();
 
             Array.prototype.forEach.call($gameButtons, function(value) {
               value.addEventListener('click', function(event) {
@@ -109,33 +117,7 @@
                 value.style.color = '#FFF';
                 $gameNumbers.innerHTML = '';
 
-                for(var i = 0; i < currentGame.range; i++) {
-                  var $buttonNumber = doc.createElement('button');
-                  $buttonNumber.textContent = i + 1;
-      
-                  $buttonNumber.setAttribute('class', 'btn-number');
-                  $buttonNumber.setAttribute('id', i + 1);
-      
-                  $buttonNumber.addEventListener('click', function(event) {
-                    var $buttonPress = doc.querySelector(`[id="${event.target.id}"]`);
-      
-                    if($buttonPress.classList.contains('btn-number-actived')) {
-                      $buttonPress.classList.remove('btn-number-actived');
-                    } else {
-                      $buttonPress.classList.add('btn-number-actived');
-                    }
-      
-                    var $numbersSelected = doc.getElementsByClassName('btn-number-actived');
-      
-                    $numbersSelected = Array.prototype.map.call($numbersSelected, function(value) {
-                      return value.id;  
-                    });
-      
-                    numbersSelected = $numbersSelected;
-                  });
-      
-                  $gameNumbers.appendChild($buttonNumber);
-                }
+                addButtonsInDOM();
               });
             });
           }
@@ -158,7 +140,18 @@
           numbersSelected.length < currentGame["max-number"] || 
           numbersSelected.length > currentGame["max-number"]
         ) {
-          return alert(`Para a ${currentGame.type} deve se escolher ${currentGame["max-number"]} números!`);
+          $modalContainer.style.display = 'flex';
+          
+          $modalMessage.innerHTML = `Para a ${currentGame.type} deve se escolher ${currentGame["max-number"]} números!`
+          
+          $modalContainer.addEventListener('click', () => {
+            $modalContainer.style.display = 'none';
+          });
+
+          $modalButton.addEventListener('click', () => {
+            $modalContainer.style.display = 'none';
+          });
+          return;
         }
 
         htmlGame += `
@@ -220,12 +213,10 @@
       clearGame: function() {
         var buttonsActived = doc.querySelectorAll('.btn-number-actived');
         
-        if(buttonsActived.length === 0) {
-          return;
-        }
+        if(buttonsActived.length === 0) {return}
 
         //Remove a classe actived dos botões
-        Array.prototype.map.call(buttonsActived, function(value) {          
+        Array.prototype.map.call(buttonsActived, (value) => {
           value.classList.remove('btn-number-actived');
         });
         numbersSelected = [];
@@ -245,15 +236,12 @@
               ids.push(random);
             }
           }
-          $numbersButtons = doc.querySelectorAll(`.btn-number`);
-          
-          ids.map(function(value) {
-            $numbersButtons[value].classList.add('btn-number-actived');
-          });
-          
-          numbersSelected = ids;
-          ids = [];
         } else {
+          if(numbersSelected.length >= currentGame["max-number"]) {
+            app().clearGame();
+            numbersSelected = [];
+          }
+
           for(var i = 0; i < numbersSelected.length; i++) {
             ids.push(parseInt(numbersSelected[i]));
           }
@@ -266,16 +254,12 @@
               numbersRemaining++;
             }
           }
-
-          $numbersButtons = doc.querySelectorAll(`.btn-number`);
-
-          ids.map(function(value) {
-            $numbersButtons[value-1].classList.add('btn-number-actived');
-          });
-          
-          numbersSelected = ids;
-          ids = [];
         }
+
+        $numbersButtons = doc.querySelectorAll(`.btn-number`);
+        ids.map((value) => $numbersButtons[value-1].classList.add('btn-number-actived'));
+          
+        numbersSelected = ids.sort((a, b) => a - b);
       }
     }
   }
