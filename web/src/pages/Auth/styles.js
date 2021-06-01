@@ -43,3 +43,8 @@ export const ForgetPassword = styled.p`
 
   margin-top: 30px;
 `;
+
+export const ErrorMessage = styled.p`
+  padding-left: 30px;
+  color: ${colors.red};
+`;

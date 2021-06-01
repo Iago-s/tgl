@@ -5,7 +5,7 @@ const colors = {
   green_light: '#27C383',
   green_avocado: '#B5C401',
   purple: '#7F3992',
-  red: '#900',
+  red: '#FF0000',
   orange: '#F79C31',
   blue_light: '#ADC0C4',
   gray: '#707070',
