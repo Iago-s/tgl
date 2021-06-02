@@ -3,11 +3,12 @@ import colors from './colors';
 
 export const GlobalStyle = createGlobalStyle`
   body {
-    background-color: ${colors.white};
-    margin: 0;
-    padding: 0;
     font-family: 'Helvetica Neue', sans-serif;
     font-style: italic;
+
+    margin: 0;
+    padding: 0;
+    background-color: ${colors.white};
   }
 
   h1, p {
@@ -15,10 +16,12 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   button {
-    cursor: pointer;
     font-style: italic;
+
     border: none;
     background-color: transparent;
+
+    cursor: pointer;
   }
 
   ol, li {
@@ -31,26 +34,43 @@ export const GlobalStyle = createGlobalStyle`
 `;
 
 export const Title = styled.h1`
-  color: ${colors.gray};
   font-weight: bold;
   font-size: ${({ fontSize }) => (fontSize ? fontSize : 35)}px;
+  color: ${({ color }) => (color ? color : colors.gray)};
   text-transform: ${({ uppercase }) => (uppercase ? 'uppercase' : 'none')};
 `;
 
 export const Container = styled.div`
   width: 100vw;
-  height: 90vh;
+  height: ${({ middle }) => (middle ? 80 : 90)}vh;
   display: flex;
-  flex-direction: row;
+  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
+
+  box-sizing: border-box;
 `;
 
 export const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 30px 0;
 
   color: ${({ color }) => (color ? color : colors.gray)};
   font-weight: bold;
   font-size: 35px;
+
+  padding: 30px 0;
+`;
+
+export const ButtonGames = styled.button`
+  font-weight: bold;
+  font-size: 14px;
+  color: ${({ color }) => (color ? colors.white_ice : colors.gray)};
+  text-align: center;
+
+  margin: 0 10px;
+  padding: 10px 20px;
+
+  border-radius: 24px;
+  border: 2px solid ${({ color }) => (color ? color : colors.white_ice)};
+  background-color: ${({ color }) => (color ? color : colors.white_ice)};
 `;

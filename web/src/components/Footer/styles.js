@@ -9,6 +9,8 @@ export const Container = styled.footer`
   justify-content: center;
   align-items: center;
 
+  box-sizing: border-box;
+
   border-top-color: ${colors.gray_borders};
   border-top-style: solid;
   border-top-width: 2px;

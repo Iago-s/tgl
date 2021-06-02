@@ -9,6 +9,7 @@ export const Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  user-select: none;
 `;
 
 export const Compact = styled.div`
