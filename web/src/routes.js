@@ -1,6 +1,9 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 import Auth from './pages/Auth';
+import Home from './pages/Home';
+import Bets from './pages/Bets';
+import NotFound from './pages/NotFound';
 
 const Routes = () => {
   return (
@@ -9,8 +12,14 @@ const Routes = () => {
         <Route path="/" exact>
           <Auth />
         </Route>
+        <Route path="/home" exact>
+          <Home />
+        </Route>
+        <Route path="/bets" exact>
+          <Bets />
+        </Route>
         <Route path="*">
-          <h1>Page not found</h1>
+          <NotFound />
         </Route>
       </Switch>
     </BrowserRouter>

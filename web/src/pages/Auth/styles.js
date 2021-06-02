@@ -20,31 +20,14 @@ export const Compact = styled.div`
   align-items: center;
 `;
 
-export const FormContainer = styled.form`
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-
-  background: ${colors.white_ice} 0% 0% no-repeat padding-box;
-  margin-top: 30px;
-
-  border-radius: 14px;
-  box-shadow: 0px 3px 25px #00000014;
-`;
-
-export const ForgetPassword = styled.p`
-  font-size: 17px;
-  text-align: right;
-  font-weight: normal;
-  color: ${colors.gray_forget_pass};
-  padding-right: 30px;
-
-  cursor: pointer;
-
-  margin-top: 30px;
-`;
-
-export const ErrorMessage = styled.p`
-  padding-left: 30px;
-  color: ${colors.red};
+export const For = styled.p`
+  width: 144px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: ${colors.white_ice};
+  background-color: ${colors.green_avocado};
+  border-radius: 100px;
+  padding: 05px 0;
+  margin: 30px 0;
 `;

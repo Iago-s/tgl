@@ -11,7 +11,7 @@ export const Field = styled.input`
   border-width: 0px 0px 2px 0px;
   border-style: solid;
   border-color: ${({ hasError }) =>
-    hasError ? colors.red : colors.gray_borders};
+    !hasError ? colors.gray_borders : colors.red};
 
   :focus {
     border-bottom-color: ${colors.gray};
