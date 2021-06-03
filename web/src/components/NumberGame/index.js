@@ -1,14 +1,14 @@
 import { NumberButton } from './styles';
 
 const NumberGame = (props) => {
-  const addNumber = (number) => {
-    if (!props.numbersSelected.includes(number)) {
+  const addNumber = (numberSelected) => {
+    if (!props.numbersSelected.includes(numberSelected)) {
       props.setNumbersSelected((oldNumbersSelected) => {
-        return [...oldNumbersSelected, number];
+        return [...oldNumbersSelected, numberSelected];
       });
     } else {
       const filter = props.numbersSelected.filter(
-        (number) => number !== number
+        (number) => number !== numberSelected
       );
 
       props.setNumbersSelected(() => filter);

@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { FaShoppingCart } from 'react-icons/fa';
 
+import { cartActions } from '../../store/cart';
 import NumberGame from '../NumberGame';
 
 import { Title, ButtonGames } from '../../styles/global';
@@ -17,6 +19,8 @@ import {
 import DUMMY_GAMES from '../../services/games.json';
 
 const Games = () => {
+  const dispatch = useDispatch();
+
   const [currentGame, setCurrentGame] = useState(DUMMY_GAMES.types[0]);
   const [numbersSelected, setNumbersSelected] = useState([]);
 
@@ -47,7 +51,23 @@ const Games = () => {
       return;
     }
 
-    alert('Sucesso');
+    let date = new Date();
+    let formatDate =
+      date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
+    dispatch(
+      cartActions.addCart({
+        game: {
+          id: new Date().getTime().toString(),
+          name: currentGame.type,
+          numbers: numbersSelected.sort((a, b) => a - b).join(','),
+          price: currentGame.price,
+          color: currentGame.color,
+          date: formatDate,
+        },
+      })
+    );
+
     setNumbersSelected([]);
   };
 
