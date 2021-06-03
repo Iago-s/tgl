@@ -1,13 +1,18 @@
+import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
+
+import { AuthContext } from '../../contexts/AuthContext';
 
 import { Container, LogoContainer, Logo, Line, NavContainer } from './styles';
 import { Button, Title } from '../../styles/global';
 
 const Header = (props) => {
+  const authContext = useContext(AuthContext);
   const history = useHistory();
 
   const handleLogout = () => {
+    authContext.logout();
     history.push('/');
   };
 
@@ -15,7 +20,7 @@ const Header = (props) => {
     <>
       <Container>
         <LogoContainer>
-          <Logo class="logo">TGL</Logo>
+          <Logo>TGL</Logo>
         </LogoContainer>
         {props.showHomeButton && (
           <Button color="transparent" onClick={() => history.push('/home')}>
@@ -51,7 +56,7 @@ const Header = (props) => {
           </Button>
         </NavContainer>
       </Container>
-      <Line class="line"></Line>
+      <Line />
     </>
   );
 };

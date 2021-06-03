@@ -41,7 +41,7 @@ const Bets = () => {
             <Subtitle margin={10}>
               Descricao Descricao Descricao Descricao Descricao
             </Subtitle>
-            <div data-js="game-numbers" class="game-numbers"></div>
+            <div></div>
           </Wrapper>
 
           <ButtonsActionsContainer>
@@ -57,14 +57,14 @@ const Bets = () => {
         </GamesContainer>
 
         <CartContainer>
-          <Cart class="cart">
+          <Cart>
             <Title style={{ margin: 20, fontSize: 24 }}>CART</Title>
             <Subtitle style={{ marginLeft: 20 }}>
               Faça seu primeiro jogo
             </Subtitle>
 
             <Wrapper>
-              <Title style={{ margin: 20, fontSize: 24 }} class="title">
+              <Title style={{ margin: 20, fontSize: 24 }}>
                 CART{' '}
                 <TextHigh>
                   TOTAL <span data-js="games-value" />

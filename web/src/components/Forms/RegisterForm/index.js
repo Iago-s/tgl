@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+
+import { AuthContext } from '../../../contexts/AuthContext';
 
 import Input from '../../Input';
 
@@ -9,6 +11,7 @@ import { Title, Button } from '../../../styles/global';
 import colors from '../../../styles/colors';
 
 const RegisterForm = (props) => {
+  const authContext = useContext(AuthContext);
   const history = useHistory();
 
   const [name, setName] = useState('');
@@ -35,7 +38,10 @@ const RegisterForm = (props) => {
     }
 
     if (password.length > 6 && email.includes('@') && name.length > 0) {
+      authContext.login();
+
       history.push('/home');
+
       return;
     }
   };
