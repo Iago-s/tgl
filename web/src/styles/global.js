@@ -67,7 +67,7 @@ export const ButtonGames = styled.button`
   color: ${({ color }) => (color ? colors.white_ice : colors.gray)};
   text-align: center;
 
-  margin: 0 10px;
+  margin-right: 10px;
   padding: 10px 20px;
 
   border-radius: 24px;
