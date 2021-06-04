@@ -108,7 +108,7 @@ const Home = () => {
                     })}
                     )
                   </DateText>
-                  <Title fontSize={20} color={colors.green}>
+                  <Title fontSize={20} color={game.color}>
                     {game.name}
                   </Title>
                 </GamesItem>

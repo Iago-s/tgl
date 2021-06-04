@@ -1,18 +1,24 @@
 import { useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { FaArrowRight } from 'react-icons/fa';
 
+import { savedGamesActions } from '../../store/savedGames';
+import { cartActions } from '../../store/cart';
 import { AuthContext } from '../../contexts/AuthContext';
 
 import { Container, LogoContainer, Logo, Line, NavContainer } from './styles';
 import { Button, Title } from '../../styles/global';
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
   const history = useHistory();
 
   const handleLogout = () => {
     authContext.logout();
+    dispatch(savedGamesActions.resetGamesAndTypes());
+    dispatch(cartActions.resetCart());
     history.push('/');
   };
 

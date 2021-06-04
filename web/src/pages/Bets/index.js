@@ -7,6 +7,7 @@ import Header from '../../components/Header';
 import Games from '../../components/Games';
 import Cart from '../../components/Cart';
 import Footer from '../../components/Footer';
+import Modal from '../../components/Modal';
 
 import { Container } from '../../styles/global';
 
@@ -18,6 +19,9 @@ const Bets = () => {
   const [currentGame, setCurrentGame] = useState(DUMMY_GAMES.types[0]);
   const [numbersSelected, setNumbersSelected] = useState([]);
 
+  const [modal, setModal] = useState(<Modal />);
+  const [showModal, setShowModal] = useState(false);
+
   const handleChangeGame = (game) => {
     setCurrentGame(game);
     setNumbersSelected([]);
@@ -28,7 +32,17 @@ const Bets = () => {
       numbersSelected.length < currentGame['max-number'] ||
       numbersSelected.length > currentGame['max-number']
     ) {
-      alert('Erro');
+      setShowModal(true);
+      setModal(
+        <Modal
+          sucess={false}
+          message={`Você deve adicionar ${currentGame['max-number']} números para realizar o jogo ${currentGame.type}.`}
+        />
+      );
+
+      setTimeout(() => {
+        setShowModal(false);
+      }, 2000);
       return;
     }
 
@@ -54,8 +68,6 @@ const Bets = () => {
 
   const handleClearGame = () => {
     setNumbersSelected([]);
-
-    console.log(numbersSelected);
   };
 
   return (
@@ -71,9 +83,15 @@ const Bets = () => {
           onClearGame={handleClearGame}
           onAddCart={handleAddCart}
         />
-        <Cart currentGame={currentGame} DUMMY_GAMES={DUMMY_GAMES} />
+        <Cart
+          currentGame={currentGame}
+          DUMMY_GAMES={DUMMY_GAMES}
+          setModal={setModal}
+          setShowModal={setShowModal}
+        />
       </Container>
       <Footer />
+      {showModal && modal}
     </>
   );
 };

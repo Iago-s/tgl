@@ -15,6 +15,10 @@ const savedGamesReducer = createSlice({
     addTypes(state, action) {
       state.types = action.payload;
     },
+    resetGamesAndTypes(state) {
+      state.games = [];
+      state.types = [];
+    },
   },
 });
 

@@ -5,6 +5,8 @@ import { FaArrowRight, FaTrashAlt } from 'react-icons/fa';
 import { cartActions } from '../../store/cart';
 import { savedGamesActions } from '../../store/savedGames';
 
+import Modal from '../Modal';
+
 import { Title, Button } from '../../styles/global';
 import {
   Subtitle,
@@ -32,9 +34,32 @@ const Cart = (props) => {
   };
 
   const handleSaveGames = () => {
-    console.log(totalPrice);
     if (totalPrice < props.currentGame['min-cart-value']) {
-      alert('Não pode adicionar ao carrinho');
+      props.setShowModal(true);
+      props.setModal(
+        totalPrice === 0 ? (
+          <Modal sucess={false} message="Carrinho vazio!" />
+        ) : (
+          <Modal
+            sucess={false}
+            message={`Valor abaixo de ${props.currentGame[
+              'min-cart-value'
+            ].toLocaleString('pt-br', {
+              style: 'currency',
+              currency: 'BRL',
+            })}. Faça mais jogos para que o total seja maior que ${props.currentGame[
+              'min-cart-value'
+            ].toLocaleString('pt-br', {
+              style: 'currency',
+              currency: 'BRL',
+            })}`}
+          />
+        )
+      );
+
+      setTimeout(() => {
+        props.setShowModal(false);
+      }, 2000);
       return;
     }
 

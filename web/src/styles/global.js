@@ -24,6 +24,10 @@ export const GlobalStyle = createGlobalStyle`
     cursor: pointer;
   }
 
+  button:hover {
+    opacity: 0.80;
+  }
+
   ol, li {
     list-style: none;
   }

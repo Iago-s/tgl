@@ -16,10 +16,7 @@ const NumberGame = (props) => {
   };
 
   return (
-    <NumberButton
-      clearAll={props.isActived}
-      onClick={() => addNumber(props.value)}
-    >
+    <NumberButton onClick={() => addNumber(props.value)}>
       {props.value}
     </NumberButton>
   );

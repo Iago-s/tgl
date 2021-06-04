@@ -79,7 +79,10 @@ const ResetPasswordForm = (props) => {
         </Button>
       </Compact>
       {alertIsVisible && (
-        <Modal message="Enviaremos um email para você redefinir sua senha!" />
+        <Modal
+          message="Enviaremos um email para você redefinir sua senha!"
+          success={true}
+        />
       )}
     </>
   );
