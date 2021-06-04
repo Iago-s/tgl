@@ -25,6 +25,10 @@ const cartReducer = createSlice({
         state.totalPrice -= gameDeleted.price;
       }
     },
+    resetCart(state) {
+      state.games = [];
+      state.totalPrice = 0;
+    },
   },
 });
 

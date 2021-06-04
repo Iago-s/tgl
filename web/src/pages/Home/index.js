@@ -1,10 +1,14 @@
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+
 import { useHistory } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
+import GameButton from '../../components/GameButton';
 
-import { Container, Title, Button, ButtonGames } from '../../styles/global';
+import { Container, Title, Button, FeedbackMessage } from '../../styles/global';
 import {
   NavContainer,
   FilterContainer,
@@ -16,7 +20,19 @@ import {
 import colors from '../../styles/colors';
 
 const Home = () => {
+  const { games, types } = useSelector((state) => state.games);
   const history = useHistory();
+
+  const [filteredGames, setFilteredGames] = useState(games);
+
+  const handleFilterGame = (type) => {
+    const newGames = games.filter((game) => game.name === type);
+    setFilteredGames(newGames);
+  };
+
+  const handleResetFilter = () => {
+    setFilteredGames(games);
+  };
 
   return (
     <>
@@ -25,9 +41,10 @@ const Home = () => {
         column
         middle={true}
         style={{
-          paddingTop: 60,
+          paddingTop: 30,
           paddingLeft: 130,
           paddingRight: 130,
+          paddingBottom: 30,
         }}
       >
         <NavContainer>
@@ -35,12 +52,21 @@ const Home = () => {
             Recent Games
           </Title>
 
-          {true && (
+          {games.length > 0 && (
             <FilterContainer>
-              <FilterButton fontSize={24}>Filters</FilterButton>
-              <ButtonGames color={colors.green}>Lotofacil</ButtonGames>
-              <ButtonGames color={colors.green_avocado}>Mega-Sena</ButtonGames>
-              <ButtonGames color={colors.blue_light}>Lotomania</ButtonGames>
+              <FilterButton fontSize={24} onClick={handleResetFilter}>
+                Filters
+              </FilterButton>
+              {types.map((type, index) => (
+                <GameButton
+                  key={index}
+                  color={type.color}
+                  onClick={() => {
+                    handleFilterGame(type.type);
+                  }}
+                  name={type.type}
+                />
+              ))}
             </FilterContainer>
           )}
 
@@ -60,17 +86,36 @@ const Home = () => {
           </Button>
         </NavContainer>
 
-        <GamesList>
-          <GamesItem color={colors.green}>
-            <Title fontSize={20} color={colors.gray_light}>
-              01, 02, 03, 04, 05, 06, 07, 08 09, 10, 11, 12, 13, 14, 15
-            </Title>
-            <DateText fontSize={20}>30/11/2021 - R$(2,50)</DateText>
-            <Title fontSize={20} color={colors.green}>
-              Lotofacil
-            </Title>
-          </GamesItem>
-        </GamesList>
+        {games.length === 0 ? (
+          <FeedbackMessage>Faça um jogo</FeedbackMessage>
+        ) : (
+          <GamesList>
+            {filteredGames.length === 0 ? (
+              <FeedbackMessage>
+                Você ainda não fez nenhum jogo desse tipo!
+              </FeedbackMessage>
+            ) : (
+              filteredGames.map((game) => (
+                <GamesItem color={game.color} key={game.id}>
+                  <Title fontSize={20} color={colors.gray_light}>
+                    {game.numbers}
+                  </Title>
+                  <DateText fontSize={20}>
+                    {game.date} - (
+                    {game.price.toLocaleString('pt-br', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                    )
+                  </DateText>
+                  <Title fontSize={20} color={colors.green}>
+                    {game.name}
+                  </Title>
+                </GamesItem>
+              ))
+            )}
+          </GamesList>
+        )}
       </Container>
       <Footer />
     </>

@@ -1,7 +1,9 @@
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaArrowRight, FaTrashAlt } from 'react-icons/fa';
 
 import { cartActions } from '../../store/cart';
+import { savedGamesActions } from '../../store/savedGames';
 
 import { Title, Button } from '../../styles/global';
 import {
@@ -20,12 +22,32 @@ import {
 
 import colors from '../../styles/colors';
 
-const Cart = () => {
+const Cart = (props) => {
+  const history = useHistory();
   const dispatch = useDispatch();
   const { games, totalPrice } = useSelector((state) => state.cart);
 
   const handleRemoveItem = (itemId) => {
     dispatch(cartActions.removeCart({ id: itemId }));
+  };
+
+  const handleSaveGames = () => {
+    console.log(totalPrice);
+    if (totalPrice < props.currentGame['min-cart-value']) {
+      alert('Não pode adicionar ao carrinho');
+      return;
+    }
+
+    games.map((item) => dispatch(savedGamesActions.addGames(item)));
+
+    const types = props.DUMMY_GAMES.types.map((item) => {
+      return { type: item.type, color: item.color };
+    });
+    dispatch(savedGamesActions.addTypes(types));
+
+    dispatch(cartActions.resetCart());
+
+    history.push('/home');
   };
 
   return (
@@ -71,6 +93,7 @@ const Cart = () => {
             </TextHigh>
           </Title>
           <Button
+            onClick={handleSaveGames}
             style={{
               width: '100%',
               paddingTop: 30,

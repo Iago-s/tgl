@@ -1,11 +1,9 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { FaShoppingCart } from 'react-icons/fa';
 
-import { cartActions } from '../../store/cart';
 import NumberGame from '../NumberGame';
+import GameButton from '../GameButton';
 
-import { Title, ButtonGames } from '../../styles/global';
+import { Title } from '../../styles/global';
 import {
   GamesContainer,
   Subtitle,
@@ -16,98 +14,51 @@ import {
   TextHigh,
 } from './styles';
 
-import DUMMY_GAMES from '../../services/games.json';
-
-const Games = () => {
-  const dispatch = useDispatch();
-
-  const [currentGame, setCurrentGame] = useState(DUMMY_GAMES.types[0]);
-  const [numbersSelected, setNumbersSelected] = useState([]);
-
+const Games = (props) => {
   var numbers = [];
-  for (let i = 0; i < currentGame.range; i++) {
+  for (let i = 0; i < props.currentGame.range; i++) {
     numbers.push(
       <NumberGame
         key={i + 1}
         value={i + 1}
-        numbersSelected={numbersSelected}
-        setNumbersSelected={setNumbersSelected}
+        numbersSelected={props.numbersSelected}
+        setNumbersSelected={props.setNumbersSelected}
       />
     );
   }
 
-  const handleChangeGame = (game) => {
-    setCurrentGame(game);
-    setNumbersSelected([]);
-  };
-
-  const addInCart = () => {
-    console.log(numbersSelected);
-    if (
-      numbersSelected.length < currentGame['max-number'] ||
-      numbersSelected.length > currentGame['max-number']
-    ) {
-      alert('Erro');
-      return;
-    }
-
-    let date = new Date();
-    let formatDate =
-      date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-
-    dispatch(
-      cartActions.addCart({
-        game: {
-          id: new Date().getTime().toString(),
-          name: currentGame.type,
-          numbers: numbersSelected.sort((a, b) => a - b).join(','),
-          price: currentGame.price,
-          color: currentGame.color,
-          date: formatDate,
-        },
-      })
-    );
-
-    setNumbersSelected([]);
-  };
-
-  const clearGame = () => {
-    setNumbersSelected([]);
-  };
-
   return (
     <GamesContainer>
       <Title style={{ marginTop: 20, marginBottom: 20, fontSize: 24 }}>
-        NEW BET <TextHigh>FOR {currentGame.type}</TextHigh>
+        NEW BET <TextHigh>FOR {props.currentGame.type}</TextHigh>
       </Title>
       <Subtitle bold margin={10}>
         Choose a game
       </Subtitle>
 
-      {DUMMY_GAMES.types.map((value, index) => (
-        <ButtonGames
+      {props.DUMMY_GAMES.types.map((value, index) => (
+        <GameButton
           key={index}
           color={value.color}
-          onClick={() => handleChangeGame(value)}
-        >
-          {value.type}
-        </ButtonGames>
+          onClick={() => props.onChangeGame(value)}
+          name={value.type}
+        />
       ))}
 
       <Subtitle bold margin={10}>
         Fill your bet
       </Subtitle>
       <Wrapper>
-        <Subtitle margin={10}>{currentGame.description}</Subtitle>
+        <Subtitle margin={10}>{props.currentGame.description}</Subtitle>
         {numbers}
       </Wrapper>
 
       <ButtonsActionsContainer>
         <Wrapper>
           <ActionButton>Complete game</ActionButton>
-          <ActionButton onClick={clearGame}>Clear game</ActionButton>
+          <ActionButton onClick={props.onClearGame}>Clear game</ActionButton>
         </Wrapper>
-        <AddCartButton onClick={addInCart}>
+        <AddCartButton onClick={() => props.onAddCart()}>
           <FaShoppingCart size={24} style={{ marginRight: 10 }} />
           Add to card
         </AddCartButton>

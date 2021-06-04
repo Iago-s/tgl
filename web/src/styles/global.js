@@ -61,16 +61,10 @@ export const Button = styled.button`
   padding: 30px 0;
 `;
 
-export const ButtonGames = styled.button`
-  font-weight: bold;
-  font-size: 14px;
-  color: ${({ color }) => (color ? colors.white_ice : colors.gray)};
-  text-align: center;
+export const FeedbackMessage = styled.p`
+  font-size: 17px;
+  color: ${colors.gray};
 
-  margin-right: 10px;
-  padding: 10px 20px;
-
-  border-radius: 24px;
-  border: 2px solid ${({ color }) => (color ? color : colors.white_ice)};
-  background-color: ${({ color }) => (color ? color : colors.white_ice)};
+  margin-top: ${({ margin }) => (margin ? margin : 0)}px;
+  margin-bottom: ${({ margin }) => (margin ? margin : 0)}px;
 `;
