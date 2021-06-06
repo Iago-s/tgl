@@ -1,24 +1,5 @@
 import styled from 'styled-components';
-import colors from '../../styles/colors';
-
-export const Box = styled.div`
-  width: 50%;
-  height: 100%;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const Compact = styled.div`
-  width: 100%;
-  height: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-`;
+import colors from '../../../styles/colors';
 
 export const FormContainer = styled.form`
   width: 60%;
@@ -35,7 +16,6 @@ export const FormContainer = styled.form`
 export const ForgetPassword = styled.p`
   font-size: 17px;
   text-align: right;
-  font-weight: normal;
   color: ${colors.gray_forget_pass};
   padding-right: 30px;
 
@@ -45,6 +25,6 @@ export const ForgetPassword = styled.p`
 `;
 
 export const ErrorMessage = styled.p`
-  padding-left: 30px;
   color: ${colors.red};
+  padding-left: 30px;
 `;

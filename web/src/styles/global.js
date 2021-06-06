@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle, css } from 'styled-components';
 import colors from './colors';
 
 export const GlobalStyle = createGlobalStyle`
@@ -37,20 +37,44 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
-export const Title = styled.h1`
-  font-weight: bold;
-  font-size: ${({ fontSize }) => (fontSize ? fontSize : 35)}px;
-  color: ${({ color }) => (color ? color : colors.gray)};
-  text-transform: ${({ uppercase }) => (uppercase ? 'uppercase' : 'none')};
-`;
-
 export const Container = styled.div`
   width: 100vw;
   height: ${({ middle }) => (middle ? 80 : 90)}vh;
   display: flex;
   flex-direction: ${({ column }) => (column ? 'column' : 'row')};
 
+  padding: ${({ paddingTopAndBottom }) =>
+      paddingTopAndBottom ? paddingTopAndBottom : 0}px
+    ${({ paddingLeftAndRight }) =>
+      paddingLeftAndRight ? paddingLeftAndRight : 0}px;
+
   box-sizing: border-box;
+`;
+
+export const Box = styled.div`
+  width: ${({ width }) => (width ? width : 50)}%;
+  height: ${({ height }) => (height ? height : 100)}%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: ${({ justify }) => (justify ? justify : 'center')};
+  align-items: center;
+  user-select: none;
+`;
+
+export const Title = styled.h1`
+  font-weight: bold;
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : 35)}px;
+  color: ${({ color }) => (color ? color : colors.gray)};
+  text-transform: ${({ uppercase }) => (uppercase ? 'uppercase' : 'none')};
+
+  ${({ titleIcon }) =>
+    titleIcon &&
+    css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    `}
 `;
 
 export const Button = styled.button`

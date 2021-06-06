@@ -1,34 +1,34 @@
 import { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 
-import { AuthContext } from '../../../contexts/AuthContext';
+import { AuthContext } from '../../../../contexts/AuthContext';
 
 import Input from '../../Input';
 
-import {
-  Compact,
-  FormContainer,
-  ForgetPassword,
-  ErrorMessage,
-} from '../styles';
-import { Title, Button } from '../../../styles/global';
-import colors from '../../../styles/colors';
+import { FormContainer, ErrorMessage } from '../styles';
+import { Box, Title, Button } from '../../../../styles/global';
+import colors from '../../../../styles/colors';
 
-const AuthenticationForm = (props) => {
+const RegisterForm = (props) => {
   const authContext = useContext(AuthContext);
   const history = useHistory();
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [nameError, setNameError] = useState(false);
 
-  const handleAuth = (event) => {
+  const handleRegister = (event) => {
     event.preventDefault();
 
-    if (email === '' || !email.includes('@')) {
+    const regex =
+      /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+    if (email === '' || !regex.test(email)) {
       setEmailError((old) => true);
     }
 
@@ -36,8 +36,13 @@ const AuthenticationForm = (props) => {
       setPasswordError((old) => true);
     }
 
-    if (password.length > 6 && email.includes('@')) {
+    if (name === '') {
+      setNameError((old) => true);
+    }
+
+    if (password.length > 6 && email.includes('@') && name.length > 0) {
       authContext.login();
+
       history.push('/home');
 
       return;
@@ -45,9 +50,19 @@ const AuthenticationForm = (props) => {
   };
 
   return (
-    <Compact>
-      <Title>Authentication</Title>
-      <FormContainer onSubmit={handleAuth}>
+    <Box width={100} height={50} justify="flex-start">
+      <Title>Registration</Title>
+      <FormContainer onSubmit={handleRegister}>
+        <Input
+          placeholder="Name"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value);
+            setNameError(false);
+          }}
+          hasError={nameError}
+        />
+        {nameError && <ErrorMessage>Preencha o nome.</ErrorMessage>}
         <Input
           placeholder="Email"
           value={email}
@@ -78,18 +93,11 @@ const AuthenticationForm = (props) => {
               : 'Digite uma senha com mais de 6 caracteres.'}
           </ErrorMessage>
         )}
-        <ForgetPassword
-          onClick={() => {
-            props.setDisplay({ auth: false, register: false, reset: true });
-          }}
-        >
-          I forget my password
-        </ForgetPassword>
         <Button color={colors.green_avocado}>
-          Log In
+          Register
           <FaArrowRight
             size={30}
-            color={colors.green_avocado}
+            color={colors.green_avocaaado}
             style={{
               marginLeft: 20,
               marginRight: 20,
@@ -99,21 +107,21 @@ const AuthenticationForm = (props) => {
       </FormContainer>
       <Button
         onClick={() => {
-          props.setDisplay({ auth: false, register: true, reset: false });
+          props.setDisplay({ auth: true, register: false, reset: false });
         }}
       >
-        Sign Up
-        <FaArrowRight
+        <FaArrowLeft
           size={30}
           color={colors.gray}
           style={{
-            marginLeft: 20,
-            marginRight: 20,
+            marginLeft: 15,
+            marginRight: 15,
           }}
         />
+        Back
       </Button>
-    </Compact>
+    </Box>
   );
 };
 
-export default AuthenticationForm;
+export default RegisterForm;

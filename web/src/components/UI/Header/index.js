@@ -3,12 +3,12 @@ import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { FaArrowRight } from 'react-icons/fa';
 
-import { savedGamesActions } from '../../store/savedGames';
-import { cartActions } from '../../store/cart';
-import { AuthContext } from '../../contexts/AuthContext';
+import { savedGamesActions } from '../../../store/savedGames';
+import { cartActions } from '../../../store/cart';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 import { Container, LogoContainer, Logo, Line, NavContainer } from './styles';
-import { Button, Title } from '../../styles/global';
+import { Button, Title } from '../../../styles/global';
 
 const Header = (props) => {
   const dispatch = useDispatch();
@@ -43,14 +43,7 @@ const Header = (props) => {
             }}
             onClick={handleLogout}
           >
-            <Title
-              fontSize={20}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <Title fontSize={20} titleIcon>
               Log out
               <FaArrowRight
                 size={20}

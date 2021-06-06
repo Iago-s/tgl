@@ -1,7 +1,7 @@
 import { FaShoppingCart } from 'react-icons/fa';
 
-import NumberGame from '../NumberGame';
-import GameButton from '../GameButton';
+import NumberGame from './NumberGame';
+import TypeGameButton from './TypeGameButton';
 
 import { Title } from '../../styles/global';
 import {
@@ -37,11 +37,12 @@ const Games = (props) => {
       </Subtitle>
 
       {props.DUMMY_GAMES.types.map((value, index) => (
-        <GameButton
+        <TypeGameButton
           key={index}
           color={value.color}
           onClick={() => props.onChangeGame(value)}
           name={value.type}
+          currentGame={props.currentGame.type}
         />
       ))}
 

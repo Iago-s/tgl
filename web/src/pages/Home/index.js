@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { useHistory } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import GameButton from '../../components/GameButton';
+import Header from '../../components/UI/Header';
+import Footer from '../../components/UI/Footer';
+import Game from '../../components/Home/Game';
+import TypeGameButton from '../../components/Bets/TypeGameButton';
 
 import { Container, Title, Button, FeedbackMessage } from '../../styles/global';
 import {
@@ -14,8 +14,6 @@ import {
   FilterContainer,
   FilterButton,
   GamesList,
-  GamesItem,
-  DateText,
 } from './styles';
 import colors from '../../styles/colors';
 
@@ -24,14 +22,17 @@ const Home = () => {
   const history = useHistory();
 
   const [filteredGames, setFilteredGames] = useState(games);
+  const [currentGame, setCurrentGame] = useState('');
 
   const handleFilterGame = (type) => {
     const newGames = games.filter((game) => game.name === type);
     setFilteredGames(newGames);
+    setCurrentGame(newGames[0].name);
   };
 
   const handleResetFilter = () => {
     setFilteredGames(games);
+    setCurrentGame('');
   };
 
   return (
@@ -39,13 +40,9 @@ const Home = () => {
       <Header />
       <Container
         column
-        middle={true}
-        style={{
-          paddingTop: 30,
-          paddingLeft: 130,
-          paddingRight: 130,
-          paddingBottom: 30,
-        }}
+        middle
+        paddingTopAndBottom={30}
+        paddingLeftAndRight={130}
       >
         <NavContainer>
           <Title uppercase fontSize={24}>
@@ -58,28 +55,24 @@ const Home = () => {
                 Filters
               </FilterButton>
               {types.map((type, index) => (
-                <GameButton
+                <TypeGameButton
                   key={index}
                   color={type.color}
                   onClick={() => {
                     handleFilterGame(type.type);
                   }}
                   name={type.type}
+                  isActived={
+                    filteredGames[0]?.name === type.type ? true : false
+                  }
+                  currentGame={currentGame}
                 />
               ))}
             </FilterContainer>
           )}
 
           <Button onClick={() => history.push('/bets')}>
-            <Title
-              fontSize={24}
-              color={colors.green_avocado}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <Title fontSize={24} color={colors.green_avocado} titleIcon>
               New Bet
               <FaArrowRight size={24} style={{ marginLeft: 10 }} />
             </Title>
@@ -87,7 +80,7 @@ const Home = () => {
         </NavContainer>
 
         {games.length === 0 ? (
-          <FeedbackMessage>Faça um jogo</FeedbackMessage>
+          <FeedbackMessage>Faça seu primeiro jogo!</FeedbackMessage>
         ) : (
           <GamesList>
             {filteredGames.length === 0 ? (
@@ -96,22 +89,14 @@ const Home = () => {
               </FeedbackMessage>
             ) : (
               filteredGames.map((game) => (
-                <GamesItem color={game.color} key={game.id}>
-                  <Title fontSize={20} color={colors.gray_light}>
-                    {game.numbers}
-                  </Title>
-                  <DateText fontSize={20}>
-                    {game.date} - (
-                    {game.price.toLocaleString('pt-br', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-                    )
-                  </DateText>
-                  <Title fontSize={20} color={game.color}>
-                    {game.name}
-                  </Title>
-                </GamesItem>
+                <Game
+                  key={game.id}
+                  color={game.color}
+                  name={game.name}
+                  price={game.price}
+                  numbers={game.numbers}
+                  date={game.date}
+                />
               ))
             )}
           </GamesList>

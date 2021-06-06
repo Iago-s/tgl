@@ -1,21 +1,17 @@
-import { useState } from 'react';
-
 import { Button } from './styles';
 
-const GameButton = (props) => {
-  const [isActived, setIsActived] = useState(false);
-
+const TypeGameButton = (props) => {
   return (
     <Button
       onClick={() => {
-        setIsActived(!isActived);
         props.onClick();
       }}
       color={props.color}
+      isActived={props.currentGame === props.name ? true : false}
     >
       {props.name}
     </Button>
   );
 };
 
-export default GameButton;
+export default TypeGameButton;

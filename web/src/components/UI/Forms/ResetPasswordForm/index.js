@@ -4,9 +4,9 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import Modal from '../../Modal';
 import Input from '../../Input';
 
-import { Compact, FormContainer, ErrorMessage } from '../styles';
-import { Title, Button } from '../../../styles/global';
-import colors from '../../../styles/colors';
+import { FormContainer, ErrorMessage } from '../styles';
+import { Box, Title, Button } from '../../../../styles/global';
+import colors from '../../../../styles/colors';
 
 const ResetPasswordForm = (props) => {
   const [email, setEmail] = useState('');
@@ -17,7 +17,10 @@ const ResetPasswordForm = (props) => {
   const handleResetPass = (event) => {
     event.preventDefault();
 
-    if (email === '' || !email.includes('@')) {
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (email === '' || !regex.test(email.toLowerCase())) {
       setEmailError(true);
 
       return;
@@ -33,7 +36,7 @@ const ResetPasswordForm = (props) => {
 
   return (
     <>
-      <Compact>
+      <Box width={100} height={50} justify="flex-start">
         <Title>Reset password</Title>
         <FormContainer onSubmit={handleResetPass}>
           <Input
@@ -77,7 +80,7 @@ const ResetPasswordForm = (props) => {
           />
           Back
         </Button>
-      </Compact>
+      </Box>
       {alertIsVisible && (
         <Modal
           message="Enviaremos um email para você redefinir sua senha!"

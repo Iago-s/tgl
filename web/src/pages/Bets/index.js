@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 
 import { cartActions } from '../../store/cart';
 
-import Header from '../../components/Header';
-import Games from '../../components/Games';
+import Header from '../../components/UI/Header';
+import Footer from '../../components/UI/Footer';
+import Modal from '../../components/UI/Modal';
+import Games from '../../components/Bets';
 import Cart from '../../components/Cart';
-import Footer from '../../components/Footer';
-import Modal from '../../components/Modal';
 
 import { Container } from '../../styles/global';
 

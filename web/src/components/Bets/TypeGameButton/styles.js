@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import colors from '../../styles/colors';
+import colors from '../../../styles/colors';
 
 export const Button = styled.button`
   font-weight: bold;
@@ -12,5 +12,6 @@ export const Button = styled.button`
 
   border-radius: 24px;
   border: 2px solid ${({ color }) => color};
-  background-color: ${colors.white_ice};
+  background-color: ${({ isActived, color }) =>
+    isActived ? color : colors.white_ice};
 `;

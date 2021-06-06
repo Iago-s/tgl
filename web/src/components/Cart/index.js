@@ -1,11 +1,12 @@
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaArrowRight, FaTrashAlt } from 'react-icons/fa';
+import { FaArrowRight } from 'react-icons/fa';
 
 import { cartActions } from '../../store/cart';
 import { savedGamesActions } from '../../store/savedGames';
 
-import Modal from '../Modal';
+import Modal from '../UI/Modal';
+import CartItem from './Item';
 
 import { Title, Button } from '../../styles/global';
 import {
@@ -15,11 +16,6 @@ import {
   CartIntern,
   TextHigh,
   CartItems,
-  CartItem,
-  TrashButton,
-  GameInfosContainer,
-  Text,
-  TextGameName,
 } from './styles';
 
 import colors from '../../styles/colors';
@@ -86,22 +82,16 @@ const Cart = (props) => {
             </Subtitle>
           ) : (
             games.map((game) => (
-              <CartItem key={game.id}>
-                <TrashButton onClick={() => handleRemoveItem(game.id)}>
-                  <FaTrashAlt size={24} />
-                </TrashButton>
-                <GameInfosContainer color={game.color}>
-                  <Text>{game.numbers}</Text>
-                  <Text>
-                    <TextGameName>{game.name}</TextGameName>{' '}
-                    {game.price.toLocaleString('pt-br', {
-                      style: 'currency',
-                      currency: 'BRL',
-                    })}
-                  </Text>
-                  <Text>{game.date}</Text>
-                </GameInfosContainer>
-              </CartItem>
+              <CartItem
+                key={game.id}
+                id={game.id}
+                onRemoveItem={handleRemoveItem}
+                color={game.color}
+                numbers={game.numbers}
+                name={game.name}
+                price={game.price}
+                date={game.date}
+              />
             ))
           )}
         </CartItems>
@@ -126,14 +116,7 @@ const Cart = (props) => {
               backgroundColor: colors.gray_borders,
             }}
           >
-            <Title
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                color: colors.green,
-              }}
-            >
+            <Title titleIcon color={colors.green}>
               Save
               <FaArrowRight
                 size={35}

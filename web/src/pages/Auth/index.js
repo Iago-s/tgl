@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import Footer from '../../components/Footer';
-import AutheticationForm from '../../components/Forms/AuthenticationForm';
-import RegisterForm from '../../components/Forms/RegisterForm';
-import ResetPasswordForm from '../../components/Forms/ResetPasswordForm';
+import Footer from '../../components/UI/Footer';
+import AutheticationForm from '../../components/UI/Forms/AuthenticationForm';
+import RegisterForm from '../../components/UI/Forms/RegisterForm';
+import ResetPasswordForm from '../../components/UI/Forms/ResetPasswordForm';
 
-import { Box, Compact, For } from './styles';
-import { Container, Title } from '../../styles/global';
+import { For } from './styles';
+import { Container, Box, Title } from '../../styles/global';
 
 const Auth = () => {
   const [display, setDisplay] = useState({
@@ -19,7 +19,7 @@ const Auth = () => {
     <>
       <Container>
         <Box>
-          <Compact>
+          <Box width={100} height={50} justify="flex-start">
             <Title fontSize={65}>The</Title>
             <Title fontSize={65}>Greatest</Title>
             <Title fontSize={65}>App</Title>
@@ -27,7 +27,7 @@ const Auth = () => {
             <Title fontSize={83} uppercase>
               Lottery
             </Title>
-          </Compact>
+          </Box>
         </Box>
         <Box>
           {display.auth && <AutheticationForm setDisplay={setDisplay} />}
