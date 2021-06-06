@@ -16,7 +16,10 @@ const NumberGame = (props) => {
   };
 
   return (
-    <NumberButton onClick={() => addNumber(props.value)}>
+    <NumberButton
+      onClick={() => addNumber(props.value)}
+      isActived={props.numbersSelected.includes(props.value)}
+    >
       {props.value}
     </NumberButton>
   );

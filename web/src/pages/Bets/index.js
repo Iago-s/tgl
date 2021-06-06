@@ -66,6 +66,45 @@ const Bets = () => {
     setNumbersSelected([]);
   };
 
+  const handleCompleteGame = () => {
+    let ids = [];
+    let random;
+    let numbersRemaining = 0;
+
+    if (numbersSelected.length === 0) {
+      while (ids.length < currentGame['max-number']) {
+        random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
+
+        if (ids.indexOf(random) === -1) {
+          ids.push(random);
+        }
+      }
+    } else {
+      if (numbersSelected.length >= currentGame['max-number']) {
+        setNumbersSelected(() => []);
+        return;
+      }
+
+      for (let i = 0; i < numbersSelected.length; i++) {
+        ids.push(parseInt(numbersSelected[i]));
+      }
+
+      while (
+        numbersRemaining <
+        currentGame['max-number'] - numbersSelected.length
+      ) {
+        random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
+
+        if (ids.indexOf(random) === -1) {
+          ids.push(random);
+          numbersRemaining++;
+        }
+      }
+    }
+
+    setNumbersSelected(ids.sort((a, b) => a - b));
+  };
+
   const handleClearGame = () => {
     setNumbersSelected([]);
   };
@@ -82,6 +121,7 @@ const Bets = () => {
           onChangeGame={handleChangeGame}
           onClearGame={handleClearGame}
           onAddCart={handleAddCart}
+          onCompleteGame={handleCompleteGame}
         />
         <Cart
           currentGame={currentGame}

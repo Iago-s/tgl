@@ -55,7 +55,9 @@ const Games = (props) => {
 
       <ButtonsActionsContainer>
         <Wrapper>
-          <ActionButton>Complete game</ActionButton>
+          <ActionButton onClick={props.onCompleteGame}>
+            Complete game
+          </ActionButton>
           <ActionButton onClick={props.onClearGame}>Clear game</ActionButton>
         </Wrapper>
         <AddCartButton onClick={() => props.onAddCart()}>
