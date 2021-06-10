@@ -2,10 +2,26 @@
 
 const User = use('App/Models/User');
 
+const Mail = use('Mail');
+const Env = use('Env');
+
 class UserController {
   async store({ request }) {
-    const data = request.only(['username', 'name', 'email', 'password']);
-    const user = await User.create(data);
+    const { username, name, email, password } = request.all();
+
+    const user = await User.create({
+      username,
+      name,
+      email,
+      password,
+    });
+
+    await Mail.send(['emails.welcome-user'], { name }, (message) => {
+      message
+        .to(email)
+        .from(Env.get('EMAIL'), 'Time TGL')
+        .subject('Seja bem vindo ao TGL!');
+    });
 
     return user;
   }

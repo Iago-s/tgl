@@ -7,6 +7,8 @@ const providers = [
   '@adonisjs/cors/providers/CorsProvider',
   '@adonisjs/lucid/providers/LucidProvider',
   '@adonisjs/validator/providers/ValidatorProvider',
+  '@adonisjs/mail/providers/MailProvider',
+  '@adonisjs/framework/providers/ViewProvider',
 ];
 
 const aceProviders = ['@adonisjs/lucid/providers/MigrationsProvider'];
