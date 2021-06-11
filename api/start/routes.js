@@ -18,5 +18,5 @@ Route.get('games', 'GameController.index');
 
 Route.group(() => {
   Route.get('bets', 'BetController.index');
-  Route.post('bets', 'BetController.store').validator('Bet');
+  Route.post('bets', 'BetController.store');
 }).middleware(['auth']);

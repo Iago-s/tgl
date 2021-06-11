@@ -3,25 +3,28 @@
 const Bet = use('App/Models/Bet');
 
 class BetController {
-  async index() {
-    const bets = await Bet.query().with('user');
+  async index({ auth }) {
+    const bets = await Bet.query().where('user_id', auth.user.id).fetch();
 
     return bets;
   }
 
   async store({ request, response, auth }) {
-    const { type, numbers, color, price } = request.all();
+    const { bets } = request.all();
+
+    const formatedBets = bets.map((element) => {
+      return {
+        ...element,
+        user_id: auth.user.id,
+      };
+    });
 
     try {
-      const bet = await Bet.create({
-        user_id: auth.user.id,
-        type,
-        numbers,
-        color,
-        price,
-      });
+      await Bet.createMany(formatedBets);
 
-      return bet;
+      return response
+        .status(200)
+        .send({ message: 'Apostas criadas com sucesso. Boa sorte!' });
     } catch (err) {
       return response
         .status(err.status)
