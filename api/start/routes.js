@@ -12,3 +12,6 @@ Route.post('passwords', 'ForgotPasswordController.store').validator(
 Route.put('passwords', 'ForgotPasswordController.update').validator(
   'ResetPassword'
 );
+
+Route.post('games', 'GameController.store').validator('Game');
+Route.get('games', 'GameController.index');
