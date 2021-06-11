@@ -2,6 +2,9 @@
 
 const Bet = use('App/Models/Bet');
 
+const Mail = use('Mail');
+const Env = use('Env');
+
 class BetController {
   async index({ auth }) {
     const bets = await Bet.query().where('user_id', auth.user.id).fetch();
@@ -21,6 +24,13 @@ class BetController {
 
     try {
       await Bet.createMany(formatedBets);
+
+      await Mail.send(['emails.new-bet'], {}, (message) => {
+        message
+          .to(auth.user.email)
+          .from(Env.get('EMAIL'), 'Time TGL')
+          .subject('Nova aposta criada');
+      });
 
       return response
         .status(200)
