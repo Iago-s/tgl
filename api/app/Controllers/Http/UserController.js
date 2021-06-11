@@ -26,7 +26,7 @@ class UserController {
   }
 
   async show() {
-    const users = User.all();
+    const users = await User.all();
 
     return users;
   }
