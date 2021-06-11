@@ -15,3 +15,8 @@ Route.put('passwords', 'ForgotPasswordController.update').validator(
 
 Route.post('games', 'GameController.store').validator('Game');
 Route.get('games', 'GameController.index');
+
+Route.group(() => {
+  Route.get('bets', 'BetController.index');
+  Route.post('bets', 'BetController.store').validator('Bet');
+}).middleware(['auth']);
