@@ -7,10 +7,9 @@ const Env = use('Env');
 
 class UserController {
   async store({ request }) {
-    const { username, name, email, password } = request.all();
+    const { name, email, password } = request.all();
 
     const user = await User.create({
-      username,
       name,
       email,
       password,
