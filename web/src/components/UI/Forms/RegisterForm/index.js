@@ -5,6 +5,7 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { AuthContext } from '../../../../contexts/AuthContext';
 
 import Input from '../../Input';
+import LoadingSpinner from '../../LoadingSpinner';
 
 import { FormContainer, ErrorMessage } from '../styles';
 import { Box, Title, Button } from '../../../../styles/global';
@@ -13,6 +14,7 @@ import colors from '../../../../styles/colors';
 const RegisterForm = (props) => {
   const authContext = useContext(AuthContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -53,57 +55,63 @@ const RegisterForm = (props) => {
     <Box width={100} height={50} justify="flex-start">
       <Title>Registration</Title>
       <FormContainer onSubmit={handleRegister}>
-        <Input
-          placeholder="Name"
-          value={name}
-          onChange={(event) => {
-            setName(event.target.value);
-            setNameError(false);
-          }}
-          hasError={nameError}
-        />
-        {nameError && <ErrorMessage>Preencha o nome.</ErrorMessage>}
-        <Input
-          placeholder="Email"
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value);
-            setEmailError(false);
-          }}
-          hasError={emailError}
-        />
-        {emailError && (
-          <ErrorMessage>
-            {email === '' ? 'Preencha o email.' : 'Digite um email valido'}
-          </ErrorMessage>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <Input
+              placeholder="Name"
+              value={name}
+              onChange={(event) => {
+                setName(event.target.value);
+                setNameError(false);
+              }}
+              hasError={nameError}
+            />
+            {nameError && <ErrorMessage>Preencha o nome.</ErrorMessage>}
+            <Input
+              placeholder="Email"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setEmailError(false);
+              }}
+              hasError={emailError}
+            />
+            {emailError && (
+              <ErrorMessage>
+                {email === '' ? 'Preencha o email.' : 'Digite um email valido'}
+              </ErrorMessage>
+            )}
+            <Input
+              placeholder="Password"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setPasswordError(false);
+              }}
+              hasError={passwordError}
+            />
+            {passwordError && (
+              <ErrorMessage>
+                {password === ''
+                  ? 'Preencha a senha.'
+                  : 'Digite uma senha com mais de 6 caracteres.'}
+              </ErrorMessage>
+            )}
+            <Button color={colors.green_avocado}>
+              Register
+              <FaArrowRight
+                size={30}
+                color={colors.green_avocaaado}
+                style={{
+                  marginLeft: 20,
+                  marginRight: 20,
+                }}
+              />
+            </Button>
+          </>
         )}
-        <Input
-          placeholder="Password"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-            setPasswordError(false);
-          }}
-          hasError={passwordError}
-        />
-        {passwordError && (
-          <ErrorMessage>
-            {password === ''
-              ? 'Preencha a senha.'
-              : 'Digite uma senha com mais de 6 caracteres.'}
-          </ErrorMessage>
-        )}
-        <Button color={colors.green_avocado}>
-          Register
-          <FaArrowRight
-            size={30}
-            color={colors.green_avocaaado}
-            style={{
-              marginLeft: 20,
-              marginRight: 20,
-            }}
-          />
-        </Button>
       </FormContainer>
       <Button
         onClick={() => {

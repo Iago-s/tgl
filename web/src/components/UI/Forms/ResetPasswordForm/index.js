@@ -3,12 +3,15 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 
 import Modal from '../../Modal';
 import Input from '../../Input';
+import LoadingSpinner from '../../LoadingSpinner';
 
 import { FormContainer, ErrorMessage } from '../styles';
 import { Box, Title, Button } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
 const ResetPasswordForm = (props) => {
+  const [loading, setLoading] = useState(false);
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
 
@@ -39,31 +42,39 @@ const ResetPasswordForm = (props) => {
       <Box width={100} height={50} justify="flex-start">
         <Title>Reset password</Title>
         <FormContainer onSubmit={handleResetPass}>
-          <Input
-            placeholder="Email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              setEmailError(false);
-            }}
-            hasError={emailError}
-          />
-          {emailError && (
-            <ErrorMessage>
-              {email === '' ? 'Preencha o email.' : 'Digite um email valido'}
-            </ErrorMessage>
+          {loading ? (
+            <LoadingSpinner />
+          ) : (
+            <>
+              <Input
+                placeholder="Email"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setEmailError(false);
+                }}
+                hasError={emailError}
+              />
+              {emailError && (
+                <ErrorMessage>
+                  {email === ''
+                    ? 'Preencha o email.'
+                    : 'Digite um email valido'}
+                </ErrorMessage>
+              )}
+              <Button color={colors.green_avocado}>
+                Send Link
+                <FaArrowRight
+                  size={30}
+                  color={colors.green_avocaaado}
+                  style={{
+                    marginLeft: 20,
+                    marginRight: 20,
+                  }}
+                />
+              </Button>
+            </>
           )}
-          <Button color={colors.green_avocado}>
-            Send Link
-            <FaArrowRight
-              size={30}
-              color={colors.green_avocaaado}
-              style={{
-                marginLeft: 20,
-                marginRight: 20,
-              }}
-            />
-          </Button>
         </FormContainer>
         <Button
           onClick={() => {

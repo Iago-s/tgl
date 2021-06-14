@@ -5,6 +5,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { AuthContext } from '../../../../contexts/AuthContext';
 
 import Input from '../../Input';
+import LoadingSpinner from '../../LoadingSpinner';
 
 import { FormContainer, ForgetPassword, ErrorMessage } from '../styles';
 import { Box, Title, Button } from '../../../../styles/global';
@@ -13,6 +14,7 @@ import colors from '../../../../styles/colors';
 const AuthenticationForm = (props) => {
   const authContext = useContext(AuthContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,54 +48,60 @@ const AuthenticationForm = (props) => {
     <Box width={100} height={50} justify="flex-start">
       <Title>Authentication</Title>
       <FormContainer onSubmit={handleAuth}>
-        <Input
-          placeholder="Email"
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value);
-            setEmailError(false);
-          }}
-          hasError={emailError}
-        />
-        {emailError && (
-          <ErrorMessage>
-            {email === '' ? 'Preencha o email.' : 'Digite um email valido'}
-          </ErrorMessage>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <Input
+              placeholder="Email"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setEmailError(false);
+              }}
+              hasError={emailError}
+            />
+            {emailError && (
+              <ErrorMessage>
+                {email === '' ? 'Preencha o email.' : 'Digite um email valido'}
+              </ErrorMessage>
+            )}
+            <Input
+              placeholder="Password"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setPasswordError(false);
+              }}
+              hasError={passwordError}
+            />
+            {passwordError && (
+              <ErrorMessage>
+                {password === ''
+                  ? 'Preencha a senha.'
+                  : 'Digite uma senha com mais de 6 caracteres.'}
+              </ErrorMessage>
+            )}
+            <ForgetPassword
+              onClick={() => {
+                props.setDisplay({ auth: false, register: false, reset: true });
+              }}
+            >
+              I forget my password
+            </ForgetPassword>
+            <Button color={colors.green_avocado}>
+              Log In
+              <FaArrowRight
+                size={30}
+                color={colors.green_avocado}
+                style={{
+                  marginLeft: 20,
+                  marginRight: 20,
+                }}
+              />
+            </Button>
+          </>
         )}
-        <Input
-          placeholder="Password"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-            setPasswordError(false);
-          }}
-          hasError={passwordError}
-        />
-        {passwordError && (
-          <ErrorMessage>
-            {password === ''
-              ? 'Preencha a senha.'
-              : 'Digite uma senha com mais de 6 caracteres.'}
-          </ErrorMessage>
-        )}
-        <ForgetPassword
-          onClick={() => {
-            props.setDisplay({ auth: false, register: false, reset: true });
-          }}
-        >
-          I forget my password
-        </ForgetPassword>
-        <Button color={colors.green_avocado}>
-          Log In
-          <FaArrowRight
-            size={30}
-            color={colors.green_avocado}
-            style={{
-              marginLeft: 20,
-              marginRight: 20,
-            }}
-          />
-        </Button>
       </FormContainer>
       <Button
         onClick={() => {

@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 import Input from '../../Input';
+import LoadingSpinner from '../../LoadingSpinner';
 
 import { FormContainer, ErrorMessage } from '../styles';
 import { Box, Title, Button } from '../../../../styles/global';
@@ -10,6 +11,7 @@ import colors from '../../../../styles/colors';
 
 const UpdatePasswordForm = ({ token }) => {
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -28,33 +30,39 @@ const UpdatePasswordForm = ({ token }) => {
     <Box>
       <Title>Update Password</Title>
       <FormContainer onSubmit={handleUpdatePass}>
-        <Input
-          placeholder="Password"
-          value={password}
-          onChange={(event) => {
-            setPassword(event.target.value);
-            setPasswordError(false);
-          }}
-          hasError={passwordError}
-        />
-        {passwordError && (
-          <ErrorMessage>
-            {password === ''
-              ? 'Preencha a senha.'
-              : 'Digite uma senha com mais de 6 caracteres.'}
-          </ErrorMessage>
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <Input
+              placeholder="Password"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value);
+                setPasswordError(false);
+              }}
+              hasError={passwordError}
+            />
+            {passwordError && (
+              <ErrorMessage>
+                {password === ''
+                  ? 'Preencha a senha.'
+                  : 'Digite uma senha com mais de 6 caracteres.'}
+              </ErrorMessage>
+            )}
+            <Button color={colors.green_avocado}>
+              Update
+              <FaArrowRight
+                size={30}
+                color={colors.green_avocado}
+                style={{
+                  marginLeft: 20,
+                  marginRight: 20,
+                }}
+              />
+            </Button>
+          </>
         )}
-        <Button color={colors.green_avocado}>
-          Update
-          <FaArrowRight
-            size={30}
-            color={colors.green_avocado}
-            style={{
-              marginLeft: 20,
-              marginRight: 20,
-            }}
-          />
-        </Button>
       </FormContainer>
       <Button onClick={() => history.push('/')}>
         <FaArrowLeft

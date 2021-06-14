@@ -1,5 +1,5 @@
 import Footer from '../../components/UI/Footer';
-import UpdatedPasswordForm from '../../components/UI/Forms/UpdatePasswordForm';
+import UpdatePasswordForm from '../../components/UI/Forms/UpdatePasswordForm';
 
 import { Container, Box, Title, For } from '../../styles/global';
 
@@ -18,7 +18,7 @@ const UpdatePassword = ({ token }) => {
             </Title>
           </Box>
         </Box>
-        <UpdatedPasswordForm token={token} />
+        <UpdatePasswordForm token={token} />
       </Container>
       <Footer />
     </>
