@@ -5,8 +5,7 @@ import AutheticationForm from '../../components/UI/Forms/AuthenticationForm';
 import RegisterForm from '../../components/UI/Forms/RegisterForm';
 import ResetPasswordForm from '../../components/UI/Forms/ResetPasswordForm';
 
-import { For } from './styles';
-import { Container, Box, Title } from '../../styles/global';
+import { Container, Box, Title, For } from '../../styles/global';
 
 const Auth = () => {
   const [display, setDisplay] = useState({

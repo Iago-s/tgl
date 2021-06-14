@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { AuthContext } from './contexts/AuthContext';
 
 import Auth from './pages/Auth';
+import UpdatePassword from './pages/UpdatePassword';
 import Home from './pages/Home';
 import Bets from './pages/Bets';
 import NotFound from './pages/NotFound';
@@ -32,6 +33,7 @@ const Routes = () => {
         <Route path="/" exact>
           <Auth />
         </Route>
+        <Route path="/reset-password/:token" component={UpdatePassword} />
         <PrivateRoute path="/home" component={Home} />
         <PrivateRoute path="/bets" component={Bets} />
         <Route path="*">
