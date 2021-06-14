@@ -6,8 +6,12 @@ const Mail = use('Mail');
 const Env = use('Env');
 
 class BetController {
-  async index({ auth }) {
-    const bets = await Bet.query().where('user_id', auth.user.id).fetch();
+  async index({ request, auth }) {
+    const { page } = request.get();
+
+    const bets = await Bet.query()
+      .where('user_id', auth.user.id)
+      .paginate(page, 10);
 
     return bets;
   }
@@ -25,7 +29,7 @@ class BetController {
     try {
       await Bet.createMany(formatedBets);
 
-      await Mail.send(['emails.new-bet'], {}, (message) => {
+      await Mail.send(['home'], { path: 'emails/new-bet' }, (message) => {
         message
           .to(auth.user.email)
           .from(Env.get('EMAIL'), 'Time TGL')

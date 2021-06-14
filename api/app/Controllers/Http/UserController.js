@@ -44,12 +44,16 @@ class UserController {
         password,
       });
 
-      await Mail.send(['emails.welcome-user'], { name }, (message) => {
-        message
-          .to(email)
-          .from(Env.get('EMAIL'), 'Time TGL')
-          .subject('Seja bem vindo ao TGL!');
-      });
+      await Mail.send(
+        ['home'],
+        { name, path: 'emails/welcome-user' },
+        (message) => {
+          message
+            .to(email)
+            .from(Env.get('EMAIL'), 'Time TGL')
+            .subject('Seja bem vindo ao TGL!');
+        }
+      );
 
       return user;
     } catch (err) {
