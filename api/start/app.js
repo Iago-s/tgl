@@ -9,6 +9,7 @@ const providers = [
   '@adonisjs/validator/providers/ValidatorProvider',
   '@adonisjs/mail/providers/MailProvider',
   '@adonisjs/framework/providers/ViewProvider',
+  '@adonisjs/antl/providers/AntlProvider',
 ];
 
 const aceProviders = ['@adonisjs/lucid/providers/MigrationsProvider'];
