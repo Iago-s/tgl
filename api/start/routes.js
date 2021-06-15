@@ -21,6 +21,7 @@ Route.put('games/:id', 'GameController.update').validator('Game');
 Route.delete('games/:id', 'GameController.destroy');
 
 Route.group(() => {
+  Route.get('users/:id', 'UserController.show');
   Route.put('users', 'UserController.update');
 
   Route.get('bets', 'BetController.index');

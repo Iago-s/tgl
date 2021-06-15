@@ -12,6 +12,19 @@ class UserController {
     return users;
   }
 
+  async show({ auth }) {
+    try {
+      const user = await User.findByOrFail('id', auth.user.id);
+
+      return user;
+    } catch (err) {
+      return response.status(err.status).send({
+        error: true,
+        message: 'Não foi possivel encontrar esse usuário',
+      });
+    }
+  }
+
   async store({ request, response }) {
     const { name, email, password } = request.all();
 
