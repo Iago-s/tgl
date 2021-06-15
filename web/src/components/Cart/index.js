@@ -33,7 +33,7 @@ const Cart = (props) => {
   };
 
   const handleSaveGames = () => {
-    if (totalPrice < props.currentGame['min-cart-value']) {
+    if (totalPrice < props.currentGame.min_cart_value) {
       props.setShowModal(true);
       props.setModal(
         totalPrice === 0 ? (
@@ -41,17 +41,19 @@ const Cart = (props) => {
         ) : (
           <Modal
             sucess={false}
-            message={`Valor abaixo de ${props.currentGame[
-              'min-cart-value'
-            ].toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'BRL',
-            })}. Faça mais jogos para que o total seja maior que ${props.currentGame[
-              'min-cart-value'
-            ].toLocaleString('pt-br', {
-              style: 'currency',
-              currency: 'BRL',
-            })}`}
+            message={`Valor abaixo de ${props.currentGame.min_cart_value.toLocaleString(
+              'pt-br',
+              {
+                style: 'currency',
+                currency: 'BRL',
+              }
+            )}. Faça mais jogos para que o total seja maior que ${props.currentGame.min_cart_value.toLocaleString(
+              'pt-br',
+              {
+                style: 'currency',
+                currency: 'BRL',
+              }
+            )}`}
           />
         )
       );
@@ -64,7 +66,7 @@ const Cart = (props) => {
 
     games.map((item) => dispatch(savedGamesActions.addGames(item)));
 
-    const types = props.DUMMY_GAMES.types.map((item) => {
+    const types = props.games.map((item) => {
       return { type: item.type, color: item.color };
     });
     dispatch(savedGamesActions.addTypes(types));

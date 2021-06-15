@@ -36,7 +36,7 @@ const Games = (props) => {
         Choose a game
       </Subtitle>
 
-      {props.DUMMY_GAMES.types.map((value, index) => (
+      {props.games.map((value, index) => (
         <TypeGameButton
           key={index}
           color={value.color}

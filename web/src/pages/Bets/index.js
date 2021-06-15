@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { cartActions } from '../../store/cart';
+import api from '../../services/api';
 
 import Header from '../../components/UI/Header';
 import Footer from '../../components/UI/Footer';
@@ -9,18 +10,29 @@ import Modal from '../../components/UI/Modal';
 import Games from '../../components/Bets';
 import Cart from '../../components/Cart';
 
-import { Container } from '../../styles/global';
-
-import DUMMY_GAMES from '../../services/games.json';
+import { Container, Title } from '../../styles/global';
 
 const Bets = () => {
   const dispatch = useDispatch();
 
-  const [currentGame, setCurrentGame] = useState(DUMMY_GAMES.types[0]);
+  const [games, setGames] = useState([]);
+
+  const [currentGame, setCurrentGame] = useState([]);
   const [numbersSelected, setNumbersSelected] = useState([]);
 
   const [modal, setModal] = useState(<Modal />);
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    const getGames = async () => {
+      const response = await api.get('/games');
+
+      setGames(response.data);
+      setCurrentGame(response.data.length !== 0 ? response.data[0] : []);
+    };
+
+    getGames();
+  }, []);
 
   const handleChangeGame = (game) => {
     setCurrentGame(game);
@@ -29,14 +41,14 @@ const Bets = () => {
 
   const handleAddCart = () => {
     if (
-      numbersSelected.length < currentGame['max-number'] ||
-      numbersSelected.length > currentGame['max-number']
+      numbersSelected.length < currentGame.max_number ||
+      numbersSelected.length > currentGame.max_number
     ) {
       setShowModal(true);
       setModal(
         <Modal
           sucess={false}
-          message={`Você deve adicionar ${currentGame['max-number']} números para realizar o jogo ${currentGame.type}.`}
+          message={`Você deve adicionar ${currentGame.max_number} números para realizar o jogo ${currentGame.type}.`}
         />
       );
 
@@ -72,7 +84,7 @@ const Bets = () => {
     let numbersRemaining = 0;
 
     if (numbersSelected.length === 0) {
-      while (ids.length < currentGame['max-number']) {
+      while (ids.length < currentGame.max_number) {
         random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
 
         if (ids.indexOf(random) === -1) {
@@ -80,7 +92,7 @@ const Bets = () => {
         }
       }
     } else {
-      if (numbersSelected.length >= currentGame['max-number']) {
+      if (numbersSelected.length >= currentGame.max_number) {
         setNumbersSelected(() => []);
         return;
       }
@@ -91,7 +103,7 @@ const Bets = () => {
 
       while (
         numbersRemaining <
-        currentGame['max-number'] - numbersSelected.length
+        currentGame.max_number - numbersSelected.length
       ) {
         random = Math.floor(Math.random() * (currentGame.range - 1) + 1);
 
@@ -112,23 +124,35 @@ const Bets = () => {
   return (
     <>
       <Header showHomeButton />
-      <Container middle>
-        <Games
-          DUMMY_GAMES={DUMMY_GAMES}
-          currentGame={currentGame}
-          numbersSelected={numbersSelected}
-          setNumbersSelected={setNumbersSelected}
-          onChangeGame={handleChangeGame}
-          onClearGame={handleClearGame}
-          onAddCart={handleAddCart}
-          onCompleteGame={handleCompleteGame}
-        />
-        <Cart
-          currentGame={currentGame}
-          DUMMY_GAMES={DUMMY_GAMES}
-          setModal={setModal}
-          setShowModal={setShowModal}
-        />
+      <Container
+        middle
+        style={{
+          alignItems: games.length === 0 && 'center',
+          justifyContent: games.length === 0 && 'center',
+        }}
+      >
+        {games.length === 0 ? (
+          <Title>Não há nenhum jogo disponivel</Title>
+        ) : (
+          <>
+            <Games
+              games={games}
+              currentGame={currentGame}
+              numbersSelected={numbersSelected}
+              setNumbersSelected={setNumbersSelected}
+              onChangeGame={handleChangeGame}
+              onClearGame={handleClearGame}
+              onAddCart={handleAddCart}
+              onCompleteGame={handleCompleteGame}
+            />
+            <Cart
+              currentGame={currentGame}
+              games={games}
+              setModal={setModal}
+              setShowModal={setShowModal}
+            />
+          </>
+        )}
       </Container>
       <Footer />
       {showModal && modal}
