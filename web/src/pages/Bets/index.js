@@ -123,7 +123,7 @@ const Bets = () => {
 
   return (
     <>
-      <Header showHomeButton />
+      <Header showHomeButton showAccountButton />
       <Container
         middle
         style={{

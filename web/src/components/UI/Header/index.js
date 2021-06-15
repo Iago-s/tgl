@@ -34,9 +34,14 @@ const Header = (props) => {
           </Button>
         )}
         <NavContainer>
-          <Button color="transparent" onClick={() => {}}>
-            <Title fontSize={20}>Account</Title>
-          </Button>
+          {props.showAccountButton && (
+            <Button
+              color="transparent"
+              onClick={() => history.push('/account')}
+            >
+              <Title fontSize={20}>Account</Title>
+            </Button>
+          )}
           <Button
             style={{
               marginLeft: 60,
