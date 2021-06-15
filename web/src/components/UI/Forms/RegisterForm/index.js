@@ -55,22 +55,14 @@ const RegisterForm = (props) => {
       };
 
       try {
-        await api.post('/users', JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        await api.post('/users', JSON.stringify(data));
 
         const authData = {
           email,
           password,
         };
 
-        const response = await api.post('/auth', JSON.stringify(authData), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await api.post('/auth', JSON.stringify(authData));
 
         setLoading(false);
 

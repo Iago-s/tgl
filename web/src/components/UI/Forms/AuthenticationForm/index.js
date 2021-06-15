@@ -48,11 +48,7 @@ const AuthenticationForm = (props) => {
           password,
         };
 
-        const response = await api.post('/auth', JSON.stringify(data), {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const response = await api.post('/auth', JSON.stringify(data));
 
         setLoading(false);
 
