@@ -1,9 +1,12 @@
+import { useParams } from 'react-router-dom';
 import Footer from '../../components/UI/Footer';
 import UpdatePasswordForm from '../../components/UI/Forms/UpdatePasswordForm';
 
 import { Container, Box, Title, For } from '../../styles/global';
 
-const UpdatePassword = ({ token }) => {
+const UpdatePassword = () => {
+  const params = useParams();
+
   return (
     <>
       <Container>
@@ -18,7 +21,7 @@ const UpdatePassword = ({ token }) => {
             </Title>
           </Box>
         </Box>
-        <UpdatePasswordForm token={token} />
+        <UpdatePasswordForm token={params.token} />
       </Container>
       <Footer />
     </>

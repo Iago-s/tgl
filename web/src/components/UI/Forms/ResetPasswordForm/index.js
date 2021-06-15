@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
+
+import api from '../../../../services/api';
 
 import Modal from '../../Modal';
 import Input from '../../Input';
@@ -15,9 +19,7 @@ const ResetPasswordForm = (props) => {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
 
-  const [alertIsVisible, setAlertIsVisible] = useState(false);
-
-  const handleResetPass = (event) => {
+  const handleResetPass = async (event) => {
     event.preventDefault();
 
     const regex =
@@ -28,17 +30,30 @@ const ResetPasswordForm = (props) => {
 
       return;
     }
+    const data = {
+      email,
+      redirect_url: 'http://localhost:3000/reset-password/',
+    };
 
-    setAlertIsVisible(true);
-    setEmail('');
+    setLoading(true);
+    try {
+      await api.post('passwords', JSON.stringify(data));
 
-    setTimeout(() => {
-      setAlertIsVisible(false);
-    }, 2000);
+      toast.success(
+        'Enviamos um email a você, siga os passos para recuperar sua senha.'
+      );
+
+      setLoading(false);
+      setEmail('');
+    } catch (err) {
+      toast.error('Tem certeza que a um usuário cadastrado com esse email?');
+      setLoading(false);
+    }
   };
 
   return (
     <>
+      <ToastContainer />
       <Box width={100} height={50} justify="flex-start">
         <Title>Reset password</Title>
         <FormContainer onSubmit={handleResetPass}>
@@ -92,12 +107,6 @@ const ResetPasswordForm = (props) => {
           Back
         </Button>
       </Box>
-      {alertIsVisible && (
-        <Modal
-          message="Enviaremos um email para você redefinir sua senha!"
-          success={true}
-        />
-      )}
     </>
   );
 };
