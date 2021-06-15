@@ -80,9 +80,9 @@ class UserController {
     try {
       const user = await User.findByOrFail('id', auth.user.id);
 
-      const { name, email, password } = request.all();
+      const { name } = request.all();
 
-      user.merge({ name, email, password });
+      user.merge({ name });
 
       await user.save();
 
