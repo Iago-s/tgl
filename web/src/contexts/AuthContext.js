@@ -2,7 +2,7 @@ import React from 'react';
 
 export const AuthContext = React.createContext({
   isAuth: () => {},
-  login: () => {},
+  login: (token) => {},
   logout: () => {},
 });
 
@@ -17,8 +17,8 @@ const AuthContextProvider = (props) => {
     return false;
   };
 
-  const handleLogin = () => {
-    localStorage.setItem('@app/token', new Date().getTime().toString());
+  const handleLogin = (token) => {
+    localStorage.setItem('@app/token', token);
   };
 
   const handleLogout = () => {

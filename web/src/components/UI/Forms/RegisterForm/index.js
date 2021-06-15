@@ -55,13 +55,27 @@ const RegisterForm = (props) => {
       };
 
       try {
-        const response = await api.post('/users', JSON.stringify(data), {
+        await api.post('/users', JSON.stringify(data), {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const authData = {
+          email,
+          password,
+        };
+
+        const response = await api.post('/auth', JSON.stringify(authData), {
           headers: {
             'Content-Type': 'application/json',
           },
         });
 
         setLoading(false);
+
+        authContext.login(response.data.token);
+        history.push('/home');
       } catch (err) {
         setLoading(false);
 
@@ -72,8 +86,8 @@ const RegisterForm = (props) => {
 
   return (
     <>
+      <ToastContainer />
       <Box width={100} height={50} justify="flex-start">
-        <ToastContainer />
         <Title>Registration</Title>
         <FormContainer onSubmit={handleRegister}>
           {loading ? (
