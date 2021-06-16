@@ -7,11 +7,18 @@ const Env = use('Env');
 
 class BetController {
   async index({ request, auth }) {
-    const { page } = request.get();
+    /*const { page } = request.get();
+    const { filter } = request.all();
 
-    const bets = await Bet.query()
-      .where('user_id', auth.user.id)
-      .paginate(page, 10);
+    if (filter) {
+      const bets = await Bet.query('users')
+        .where({ user_id: auth.user.id, type: filter })
+        .paginate(page, 5);
+
+      return bets;
+    }*/
+
+    const bets = await Bet.query().where('user_id', auth.user.id).fetch();
 
     return bets;
   }

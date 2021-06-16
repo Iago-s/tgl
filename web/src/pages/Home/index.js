@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
+
+import api from '../../services/api';
 
 import Header from '../../components/UI/Header';
 import Footer from '../../components/UI/Footer';
@@ -18,22 +19,64 @@ import {
 import colors from '../../styles/colors';
 
 const Home = () => {
-  const { games, types } = useSelector((state) => state.games);
   const history = useHistory();
 
-  const [filteredGames, setFilteredGames] = useState(games);
+  const [bets, setBets] = useState([]);
+  const [types, setTypes] = useState([]);
+
+  const [filteredGames, setFilteredGames] = useState([]);
   const [currentGame, setCurrentGame] = useState('');
 
-  const handleFilterGame = (type) => {
-    const newGames = games.filter((game) => game.name === type);
+  const handleFilterGame = async (type) => {
+    const newGames = bets.filter((game) => game.type === type);
+    console.log(newGames, currentGame);
+
     setFilteredGames(newGames);
-    setCurrentGame(newGames[0].name);
+    setCurrentGame(newGames[0]?.type);
+
+    /*const data = { filter: type };
+
+    try {
+      const response = await api.get('/bets', JSON.stringify(data));
+      setFilteredGames(response.data.data);
+    } catch (err) {
+      console.log({ err });
+    }*/
   };
 
   const handleResetFilter = () => {
-    setFilteredGames(games);
+    setFilteredGames(bets);
     setCurrentGame('');
   };
+
+  useEffect(() => {
+    const getTypes = async () => {
+      try {
+        const response = await api.get('/games');
+
+        setTypes(response.data);
+      } catch (err) {
+        console.log('Error types');
+      }
+    };
+
+    getTypes();
+  }, []);
+
+  useEffect(() => {
+    const getBets = async () => {
+      try {
+        const response = await api.get('/bets?page=2');
+
+        setBets(response.data);
+        setFilteredGames(response.data);
+      } catch (err) {
+        console.log('Error bets');
+      }
+    };
+
+    getBets();
+  }, []);
 
   return (
     <>
@@ -49,21 +92,21 @@ const Home = () => {
             Recent Games
           </Title>
 
-          {games.length > 0 && (
+          {bets.length > 0 && (
             <FilterContainer>
               <FilterButton fontSize={24} onClick={handleResetFilter}>
                 Filters
               </FilterButton>
-              {types.map((type, index) => (
+              {types.map((item, index) => (
                 <TypeGameButton
                   key={index}
-                  color={type.color}
+                  color={item.color}
                   onClick={() => {
-                    handleFilterGame(type.type);
+                    handleFilterGame(item.type);
                   }}
-                  name={type.type}
+                  name={item.type}
                   isActived={
-                    filteredGames[0]?.name === type.type ? true : false
+                    filteredGames[0]?.type === item.type ? true : false
                   }
                   currentGame={currentGame}
                 />
@@ -79,7 +122,7 @@ const Home = () => {
           </Button>
         </NavContainer>
 
-        {games.length === 0 ? (
+        {bets.length === 0 ? (
           <FeedbackMessage>Faça seu primeiro jogo!</FeedbackMessage>
         ) : (
           <GamesList>
@@ -92,10 +135,10 @@ const Home = () => {
                 <Game
                   key={game.id}
                   color={game.color}
-                  name={game.name}
+                  name={game.type}
                   price={game.price}
                   numbers={game.numbers}
-                  date={game.date}
+                  date={new Date(game.created_at)}
                 />
               ))
             )}

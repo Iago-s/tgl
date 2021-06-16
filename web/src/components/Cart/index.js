@@ -5,8 +5,9 @@ import { FaArrowRight } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
+import api from '../../services/api';
+
 import { cartActions } from '../../store/cart';
-import { savedGamesActions } from '../../store/savedGames';
 
 import LoadingSpinner from '../UI/LoadingSpinner';
 import CartItem from './Item';
@@ -33,7 +34,7 @@ const Cart = (props) => {
     dispatch(cartActions.removeCart({ id: itemId }));
   };
 
-  const handleSaveGames = () => {
+  const handleSaveGames = async () => {
     if (totalPrice < props.currentGame.min_cart_value) {
       toast.error(
         totalPrice === 0
@@ -55,16 +56,31 @@ const Cart = (props) => {
       return;
     }
 
-    games.map((item) => dispatch(savedGamesActions.addGames(item)));
+    setLoading(true);
 
-    const types = props.games.map((item) => {
-      return { type: item.type, color: item.color };
+    const bets = games.map((item) => {
+      return {
+        type: item.name,
+        numbers: item.numbers,
+        price: item.price,
+        color: item.color,
+      };
     });
-    dispatch(savedGamesActions.addTypes(types));
 
-    dispatch(cartActions.resetCart());
+    const data = { bets };
 
-    history.push('/home');
+    try {
+      await api.post('/bets', JSON.stringify(data));
+
+      dispatch(cartActions.resetCart());
+      setLoading(true);
+
+      history.push('/home');
+    } catch (err) {
+      toast.error('Ocorreu um error');
+
+      setLoading(false);
+    }
   };
 
   return (
