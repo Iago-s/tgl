@@ -49,13 +49,20 @@ const UpdatePasswordForm = ({ token }) => {
         history.push('/');
       }, 5000);
     } catch (err) {
-      toast.error('Seu token não e valido.');
-
       setLoading(false);
+
+      if (err.response) {
+        err.response.status === 404
+          ? toast.error('Seu token não e valido.')
+          : toast.error(
+              'Ocorreu um erro. O problema é conosco não se preocupe!'
+            );
+        return;
+      }
+
+      toast.error('Ocorreu um erro. O problema é conosco não se preocupe!');
     }
   };
-
-  console.log(token);
 
   return (
     <>

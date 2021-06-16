@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import api from '../../services/api';
 
@@ -56,12 +58,18 @@ const Home = () => {
 
         setTypes(response.data);
       } catch (err) {
-        console.log('Error types');
+        toast.error(
+          'Ocorreu um erro. O problema é conosco não se preocupe! Você será redirecionado...'
+        );
+
+        setTimeout(() => {
+          history.push('/');
+        }, 5000);
       }
     };
 
     getTypes();
-  }, []);
+  }, [history]);
 
   useEffect(() => {
     const getBets = async () => {
@@ -80,6 +88,7 @@ const Home = () => {
 
   return (
     <>
+      <ToastContainer />
       <Header showAccountButton />
       <Container
         column

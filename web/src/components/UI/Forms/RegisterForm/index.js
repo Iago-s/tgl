@@ -71,7 +71,16 @@ const RegisterForm = (props) => {
       } catch (err) {
         setLoading(false);
 
-        toast.error('Já existe um usuário com esse email!');
+        if (err.response) {
+          err.response.status === 400
+            ? toast.error('Já existe um usuário com esse email!')
+            : toast.error(
+                'Ocorreu um erro. O problema é conosco não se preocupe!'
+              );
+          return;
+        }
+
+        toast.error('Ocorreu um erro. O problema é conosco não se preocupe!');
       }
     }
   };

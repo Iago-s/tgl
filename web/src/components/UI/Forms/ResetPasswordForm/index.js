@@ -45,8 +45,21 @@ const ResetPasswordForm = (props) => {
       setLoading(false);
       setEmail('');
     } catch (err) {
-      toast.error('Tem certeza que a um usuário cadastrado com esse email?');
       setLoading(false);
+
+      if (err.response) {
+        err.response.status === 404
+          ? toast.error(
+              'Tem certeza que a um usuário cadastrado com esse email?'
+            )
+          : toast.error(
+              'Ocorreu um erro. O problema é conosco não se preocupe!'
+            );
+
+        return;
+      }
+
+      toast.error('Ocorreu um erro. O problema é conosco não se preocupe!');
     }
   };
 

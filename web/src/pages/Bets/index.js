@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -14,6 +15,7 @@ import Cart from '../../components/Cart';
 import { Container, Title } from '../../styles/global';
 
 const Bets = () => {
+  const history = useHistory();
   const dispatch = useDispatch();
 
   const [games, setGames] = useState([]);
@@ -23,14 +25,24 @@ const Bets = () => {
 
   useEffect(() => {
     const getGames = async () => {
-      const response = await api.get('/games');
+      try {
+        const response = await api.get('/games');
 
-      setGames(response.data);
-      setCurrentGame(response.data.length !== 0 ? response.data[0] : []);
+        setGames(response.data);
+        setCurrentGame(response.data.length !== 0 ? response.data[0] : []);
+      } catch (err) {
+        toast.error(
+          'Ocorreu um erro. O problema é conosco não se preocupe! Você será redirecionado...'
+        );
+
+        setTimeout(() => {
+          history.push('/');
+        }, 5000);
+      }
     };
 
     getGames();
-  }, []);
+  }, [history]);
 
   const handleChangeGame = (game) => {
     setCurrentGame(game);

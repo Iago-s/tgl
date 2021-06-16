@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -13,6 +14,7 @@ import { FormContainer, ErrorMessage } from '../styles';
 import colors from '../../../../styles/colors';
 
 const Account = () => {
+  const history = useHistory();
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState('');
@@ -58,15 +60,27 @@ const Account = () => {
 
   useEffect(() => {
     const getUser = async () => {
-      const response = await api.get('users/1');
+      try {
+        const response = await api.get('users/1');
 
-      setName(response.data.name);
-      setEmail(response.data.email);
-      setOldName(response.data.name);
+        setName(response.data.name);
+        setEmail(response.data.email);
+        setOldName(response.data.name);
+      } catch (err) {
+        setLoading(true);
+
+        toast.error(
+          'Ocorreu um erro. O problema é conosco não se preocupe! Você será redirecionado...'
+        );
+
+        setTimeout(() => {
+          history.push('/');
+        }, 5000);
+      }
     };
 
     getUser();
-  }, []);
+  }, [history]);
 
   return (
     <>

@@ -77,9 +77,15 @@ const Cart = (props) => {
 
       history.push('/home');
     } catch (err) {
-      toast.error('Ocorreu um error');
+      setLoading(true);
 
-      setLoading(false);
+      toast.error(
+        'Ocorreu um erro. O problema é conosco não se preocupe! Você será redirecionado...'
+      );
+
+      setTimeout(() => {
+        history.push('/');
+      }, 5000);
     }
   };
 
