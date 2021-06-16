@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 import api from '../../../../services/api';
 
-import Modal from '../../Modal';
 import Input from '../../Input';
 import LoadingSpinner from '../../LoadingSpinner';
 

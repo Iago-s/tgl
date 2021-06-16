@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import { cartActions } from '../../store/cart';
 import api from '../../services/api';
 
 import Header from '../../components/UI/Header';
 import Footer from '../../components/UI/Footer';
-import Modal from '../../components/UI/Modal';
 import Games from '../../components/Bets';
 import Cart from '../../components/Cart';
 
@@ -19,9 +20,6 @@ const Bets = () => {
 
   const [currentGame, setCurrentGame] = useState([]);
   const [numbersSelected, setNumbersSelected] = useState([]);
-
-  const [modal, setModal] = useState(<Modal />);
-  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const getGames = async () => {
@@ -44,17 +42,10 @@ const Bets = () => {
       numbersSelected.length < currentGame.max_number ||
       numbersSelected.length > currentGame.max_number
     ) {
-      setShowModal(true);
-      setModal(
-        <Modal
-          sucess={false}
-          message={`Você deve adicionar ${currentGame.max_number} números para realizar o jogo ${currentGame.type}.`}
-        />
+      toast.warning(
+        `Você deve adicionar ${currentGame.max_number} números para realizar o jogo ${currentGame.type}.`
       );
 
-      setTimeout(() => {
-        setShowModal(false);
-      }, 2000);
       return;
     }
 
@@ -123,6 +114,7 @@ const Bets = () => {
 
   return (
     <>
+      <ToastContainer />
       <Header showHomeButton showAccountButton />
       <Container
         middle
@@ -145,17 +137,11 @@ const Bets = () => {
               onAddCart={handleAddCart}
               onCompleteGame={handleCompleteGame}
             />
-            <Cart
-              currentGame={currentGame}
-              games={games}
-              setModal={setModal}
-              setShowModal={setShowModal}
-            />
+            <Cart currentGame={currentGame} games={games} />
           </>
         )}
       </Container>
       <Footer />
-      {showModal && modal}
     </>
   );
 };

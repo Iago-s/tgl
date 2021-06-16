@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaArrowRight } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 import { cartActions } from '../../store/cart';
 import { savedGamesActions } from '../../store/savedGames';
 
-import Modal from '../UI/Modal';
 import LoadingSpinner from '../UI/LoadingSpinner';
 import CartItem from './Item';
 
@@ -34,14 +35,10 @@ const Cart = (props) => {
 
   const handleSaveGames = () => {
     if (totalPrice < props.currentGame.min_cart_value) {
-      props.setShowModal(true);
-      props.setModal(
-        totalPrice === 0 ? (
-          <Modal sucess={false} message="Carrinho vazio!" />
-        ) : (
-          <Modal
-            sucess={false}
-            message={`Valor abaixo de ${props.currentGame.min_cart_value.toLocaleString(
+      toast.error(
+        totalPrice === 0
+          ? 'Carrinho vazio'
+          : `Valor abaixo de ${props.currentGame.min_cart_value.toLocaleString(
               'pt-br',
               {
                 style: 'currency',
@@ -53,14 +50,8 @@ const Cart = (props) => {
                 style: 'currency',
                 currency: 'BRL',
               }
-            )}`}
-          />
-        )
+            )}`
       );
-
-      setTimeout(() => {
-        props.setShowModal(false);
-      }, 2000);
       return;
     }
 
