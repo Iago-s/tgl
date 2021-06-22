@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Form, Input, Label } from '../styles';
+import {
+  Form,
+  Input,
+  InputPasswordContainer,
+  InputPassword,
+  ShowPasswordButton,
+  Label,
+} from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
 const RegisterForm = ({ setDisplay, visible }) => {
+  const [passwordIsVisible, setPasswordIsVisible] = useState(true);
+
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+
+  const [password, setPassword] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+
+  const handleShowPassword = () => {
+    setPasswordIsVisible(!passwordIsVisible);
+  };
+
   return (
     <>
       <Title>Registration</Title>
@@ -16,7 +35,21 @@ const RegisterForm = ({ setDisplay, visible }) => {
         <Label>E-mail</Label>
         <Input placeholder="Your best email" />
         <Label>Password</Label>
-        <Input placeholder="Your password" />
+        <InputPasswordContainer hasError={passwordError}>
+          <InputPassword
+            placeholder="Enter your password"
+            secureTextEntry={passwordIsVisible}
+            value={password}
+            onChangeText={(value) => setPassword(value)}
+          />
+          <ShowPasswordButton onPress={handleShowPassword}>
+            <Ionicons
+              name={passwordIsVisible ? 'eye-off-outline' : 'eye-outline'}
+              size={hp('3.5%')}
+              color={colors.gray_inputs}
+            />
+          </ShowPasswordButton>
+        </InputPasswordContainer>
         <Button>
           <TextButton>
             Register{' '}

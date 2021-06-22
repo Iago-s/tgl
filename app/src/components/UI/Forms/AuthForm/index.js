@@ -3,7 +3,15 @@ import Toast from 'react-native-toast-message';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Form, Input, Label, ForgotPassword } from '../styles';
+import {
+  Form,
+  Label,
+  Input,
+  InputPasswordContainer,
+  InputPassword,
+  ShowPasswordButton,
+  ForgotPassword,
+} from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
@@ -17,6 +25,10 @@ const AuthForm = ({ setDisplay, visible }) => {
   const [passwordError, setPasswordError] = useState(false);
 
   const handleAuth = () => {
+    if (password === '') {
+      setPasswordError(true);
+    }
+
     Toast.show({
       type: 'success',
       position: 'top',
@@ -29,6 +41,10 @@ const AuthForm = ({ setDisplay, visible }) => {
     });
   };
 
+  const handleShowPassword = () => {
+    setPasswordIsVisible(!passwordIsVisible);
+  };
+
   return (
     <>
       <Title>Authentication</Title>
@@ -36,11 +52,21 @@ const AuthForm = ({ setDisplay, visible }) => {
         <Label>E-mail</Label>
         <Input placeholder="Enter your email" hasError={emailError} />
         <Label>Password</Label>
-        <Input
-          placeholder="Enter your password"
-          hasError={passwordError}
-          secureTextEntry={passwordIsVisible}
-        />
+        <InputPasswordContainer hasError={passwordError}>
+          <InputPassword
+            placeholder="Enter your password"
+            secureTextEntry={passwordIsVisible}
+            value={password}
+            onChangeText={(value) => setPassword(value)}
+          />
+          <ShowPasswordButton onPress={handleShowPassword}>
+            <Ionicons
+              name={passwordIsVisible ? 'eye-off-outline' : 'eye-outline'}
+              size={hp('3.5%')}
+              color={colors.gray_inputs}
+            />
+          </ShowPasswordButton>
+        </InputPasswordContainer>
         <ForgotPassword
           onPress={() => {
             setDisplay({
