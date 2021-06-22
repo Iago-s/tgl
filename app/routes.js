@@ -28,6 +28,7 @@ const MainStackScreen = ({ userToken }) => {
           component={Authentication}
           options={{
             animationEnabled: false,
+            headerShown: false,
           }}
         />
       )}
