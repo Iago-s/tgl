@@ -2,6 +2,8 @@ import React from 'react';
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 
+import AuthContextProvider from './src/contexts/AuthContext';
+
 import Routes from './routes';
 
 const App = () => {
@@ -21,7 +23,11 @@ const App = () => {
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
-    return <Routes />;
+    return (
+      <AuthContextProvider>
+        <Routes />
+      </AuthContextProvider>
+    );
   }
 };
 
