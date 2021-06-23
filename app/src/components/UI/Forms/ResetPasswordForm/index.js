@@ -1,19 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 
-import { Form, Input, Label } from '../styles';
+import Input from '../../Input';
+
+import { Form } from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
 const ResetPasswordForm = ({ setDisplay, visible }) => {
+  const [email, setEmail] = useState('');
+  const [emailError, setEmailError] = useState(false);
+
   return (
     <>
       <Title>Reset password</Title>
 
       <Form>
-        <Label>E-mail</Label>
-        <Input placeholder="Enter a valid email" />
+        <Input
+          label="E-mail"
+          placeholder="Your best email"
+          value={email}
+          setValue={setEmail}
+          hasError={emailError}
+        />
         <Button>
           <TextButton>
             Send Link{' '}

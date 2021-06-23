@@ -2,54 +2,49 @@ import React, { useState } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
 
-import {
-  Form,
-  Input,
-  InputPasswordContainer,
-  InputPassword,
-  ShowPasswordButton,
-  Label,
-} from '../styles';
+import Input from '../../Input';
+import PasswordInput from '../../PasswordInput';
+
+import { Form } from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
 const RegisterForm = ({ setDisplay, visible }) => {
   const [passwordIsVisible, setPasswordIsVisible] = useState(true);
 
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState(false);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
-
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-
-  const handleShowPassword = () => {
-    setPasswordIsVisible(!passwordIsVisible);
-  };
 
   return (
     <>
       <Title>Registration</Title>
       <Form>
-        <Label>Name</Label>
-        <Input placeholder="Your name" />
-        <Label>E-mail</Label>
-        <Input placeholder="Your best email" />
-        <Label>Password</Label>
-        <InputPasswordContainer hasError={passwordError}>
-          <InputPassword
-            placeholder="Enter your password"
-            secureTextEntry={passwordIsVisible}
-            value={password}
-            onChangeText={(value) => setPassword(value)}
-          />
-          <ShowPasswordButton onPress={handleShowPassword}>
-            <Ionicons
-              name={passwordIsVisible ? 'eye-off-outline' : 'eye-outline'}
-              size={hp('3.5%')}
-              color={colors.gray_inputs}
-            />
-          </ShowPasswordButton>
-        </InputPasswordContainer>
+        <Input
+          label="Name"
+          placeholder="Your name"
+          value={name}
+          setValue={setName}
+          hasError={nameError}
+        />
+        <Input
+          label="E-mail"
+          placeholder="Your best email"
+          value={email}
+          setValue={setEmail}
+          hasError={emailError}
+        />
+        <PasswordInput
+          label="Password"
+          password={password}
+          setPassword={setPassword}
+          passwordError={passwordError}
+          passwordIsVisible={passwordIsVisible}
+          setPasswordIsVisible={setPasswordIsVisible}
+        />
         <Button>
           <TextButton>
             Register{' '}
