@@ -33,9 +33,9 @@ const Authentication = () => {
     <>
       <BarStatus backgroundColor={colors.white} />
       <Container>
-        <Toast ref={(ref) => Toast.setRef(ref)} />
+        <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 999 }} />
         <KeyboardAvoidingView>
-          <Logo />
+          {visible && <Logo />}
           {display.auth && (
             <AuthForm setDisplay={setDisplay} visible={visible} />
           )}

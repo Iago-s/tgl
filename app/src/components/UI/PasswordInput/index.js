@@ -15,6 +15,7 @@ const PasswordInput = ({
   password,
   setPassword,
   passwordError,
+  setPasswordError,
   passwordIsVisible,
   setPasswordIsVisible,
 }) => {
@@ -28,7 +29,10 @@ const PasswordInput = ({
           placeholder="Enter your password"
           secureTextEntry={passwordIsVisible}
           value={password}
-          onChangeText={(value) => setPassword(value)}
+          onChangeText={(value) => {
+            setPassword(value);
+            setPasswordError(false);
+          }}
         />
         <ShowPasswordButton onPress={handleShowPassword}>
           <Ionicons

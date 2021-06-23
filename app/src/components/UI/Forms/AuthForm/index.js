@@ -6,6 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../Input';
 import PasswordInput from '../../PasswordInput';
 
+import { isInvalidMail, isMinChar } from '../../../../utils/invalidInput';
+
 import { Form, ForgotPassword } from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
@@ -20,20 +22,23 @@ const AuthForm = ({ setDisplay, visible }) => {
   const [passwordError, setPasswordError] = useState(false);
 
   const handleAuth = () => {
-    if (password === '') {
-      setPasswordError(true);
+    setEmailError(() => isInvalidMail(email));
+    setPasswordError(() => isMinChar(password, 6));
+
+    if (!isMinChar(password, 6) && !isInvalidMail(email)) {
+      Toast.show({
+        type: 'success',
+        position: 'top',
+        text1: 'Redirect...',
+        text2: 'Welcome back! Wait we are redirecting you.',
+        visibilityTime: 3000,
+        autoHide: true,
+        topOffset: hp('3%'),
+        bottomOffset: 40,
+      });
     }
 
-    Toast.show({
-      type: 'success',
-      position: 'top',
-      text1: 'Hello',
-      text2: 'This is some something 👋',
-      visibilityTime: 3000,
-      autoHide: true,
-      topOffset: hp('3%'),
-      bottomOffset: 40,
-    });
+    return;
   };
 
   return (
@@ -46,10 +51,12 @@ const AuthForm = ({ setDisplay, visible }) => {
           value={email}
           setValue={setEmail}
           hasError={emailError}
+          setHasError={setEmailError}
         />
         <PasswordInput
           label="Password"
           password={password}
+          setPasswordError={setPasswordError}
           setPassword={setPassword}
           passwordError={passwordError}
           passwordIsVisible={passwordIsVisible}
