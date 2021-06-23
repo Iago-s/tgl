@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Toast from 'react-native-toast-message';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,13 +6,17 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../Input';
 import PasswordInput from '../../PasswordInput';
 
+import { AuthContext } from '../../../../contexts/AuthContext';
+import api from '../../../../services/api';
 import { isInvalidMail, isMinChar } from '../../../../utils/invalidInput';
 
 import { Form, ForgotPassword } from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
-const AuthForm = ({ setDisplay, visible }) => {
+const AuthForm = ({ setDisplay, setLoading, visible }) => {
+  const authContext = useContext(AuthContext);
+
   const [passwordIsVisible, setPasswordIsVisible] = useState(true);
 
   const [email, setEmail] = useState('');
@@ -21,21 +25,49 @@ const AuthForm = ({ setDisplay, visible }) => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
-  const handleAuth = () => {
+  const handleAuth = async () => {
     setEmailError(() => isInvalidMail(email));
     setPasswordError(() => isMinChar(password, 6));
 
     if (!isMinChar(password, 6) && !isInvalidMail(email)) {
-      Toast.show({
-        type: 'success',
-        position: 'top',
-        text1: 'Redirect...',
-        text2: 'Welcome back! Wait we are redirecting you.',
-        visibilityTime: 3000,
-        autoHide: true,
-        topOffset: hp('3%'),
-        bottomOffset: 40,
-      });
+      setLoading(true);
+
+      try {
+        const data = {
+          email,
+          password,
+        };
+
+        const response = await api.post('/auth', JSON.stringify(data));
+
+        setLoading(false);
+
+        authContext.login(response.data.token);
+      } catch (err) {
+        setLoading(false);
+
+        if (err.response) {
+          err.response.status === 401
+            ? Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Wrong email or password ',
+              })
+            : Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2:
+                  'An error has occurred. The problem is with us, do not worry!',
+              });
+          return;
+        }
+
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'An error has occurred. The problem is with us, do not worry!',
+        });
+      }
     }
 
     return;

@@ -1,9 +1,9 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import {AuthContext} from './src/contexts/AuthContext';
+import { AuthContext } from './src/contexts/AuthContext';
 
 import Authentication from './src/pages/Authentication';
 import Home from './src/pages/Home';
@@ -13,7 +13,7 @@ import Account from './src/pages/Account';
 const Stack = createStackNavigator();
 const Tabs = createBottomTabNavigator();
 
-const MainStackScreen = ({userToken}) => {
+const MainStackScreen = ({ userToken }) => {
   return (
     <Stack.Navigator>
       {userToken ? (
@@ -49,11 +49,11 @@ const TabsScreen = () => {
 };
 
 const Routes = () => {
-  const {token} = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
 
   return (
     <NavigationContainer>
-      <MainStackScreen userToken={token}/>
+      <MainStackScreen userToken={token} />
     </NavigationContainer>
   );
 };

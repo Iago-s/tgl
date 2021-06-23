@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Toast from 'react-native-toast-message';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,6 +6,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../Input';
 import PasswordInput from '../../PasswordInput';
 
+import { AuthContext } from '../../../../contexts/AuthContext';
+import api from '../../../../services/api';
 import {
   isEmpty,
   isInvalidMail,
@@ -16,7 +18,9 @@ import { Form } from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
-const RegisterForm = ({ setDisplay, visible }) => {
+const RegisterForm = ({ setDisplay, setLoading, visible }) => {
+  const authContext = useContext(AuthContext);
+
   const [passwordIsVisible, setPasswordIsVisible] = useState(true);
 
   const [name, setName] = useState('');
@@ -26,22 +30,58 @@ const RegisterForm = ({ setDisplay, visible }) => {
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     setNameError(isEmpty(name));
     setEmailError(isInvalidMail(email));
     setPasswordError(isMinChar(password, 6));
 
     if (!isMinChar(password, 6) && !isInvalidMail(email) && !isEmpty(name)) {
-      Toast.show({
-        type: 'success',
-        position: 'top',
-        text1: 'Success...',
-        text2: 'Congratulations your account has been created!',
-        visibilityTime: 3000,
-        autoHide: true,
-        topOffset: hp('3%'),
-        bottomOffset: 40,
-      });
+      setLoading(true);
+
+      const data = {
+        name,
+        email,
+        password,
+      };
+
+      try {
+        await api.post('/users', JSON.stringify(data));
+
+        const authData = {
+          email,
+          password,
+        };
+
+        const response = await api.post('/auth', JSON.stringify(authData));
+
+        setLoading(false);
+
+        authContext.login(response.data.token);
+      } catch (err) {
+        setLoading(false);
+
+        if (err.response) {
+          err.response.status === 400
+            ? Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'There is already a registered user with this email.',
+              })
+            : Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2:
+                  'An error has occurred. The problem is with us, do not worry!',
+              });
+          return;
+        }
+
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'An error has occurred. The problem is with us, do not worry!',
+        });
+      }
     }
 
     return;
