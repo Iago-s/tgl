@@ -22,6 +22,7 @@ const MainStackScreen = ({ userToken }) => {
           component={TabsScreen}
           options={{
             animationEnabled: false,
+            headerShown: false,
           }}
         />
       ) : (

@@ -8,7 +8,7 @@ import colors from '../../../styles/colors';
 export const Container = styled.View``;
 
 export const TglText = styled.Text`
-  font-size: ${hp('8%')};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : hp('8%'))};
   font-family: 'HelveticaNeueBold';
   font-weight: bold;
   font-style: italic;
@@ -18,8 +18,8 @@ export const TglText = styled.Text`
 `;
 
 export const Line = styled.View`
-  width: ${wp('30%')};
-  height: ${hp('1%')};
+  width: ${({ width }) => (width ? width : hp('18%'))};
+  height: ${({ height }) => (height ? height : hp('1%'))};
 
   margin: auto;
 
