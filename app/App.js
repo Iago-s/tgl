@@ -1,8 +1,10 @@
 import React from 'react';
 import AppLoading from 'expo-app-loading';
+import { Provider } from 'react-redux';
 import { useFonts } from 'expo-font';
 
 import AuthContextProvider from './src/contexts/AuthContext';
+import store from './src/store';
 
 import Routes from './routes';
 
@@ -24,9 +26,11 @@ const App = () => {
     return <AppLoading />;
   } else {
     return (
-      <AuthContextProvider>
-        <Routes />
-      </AuthContextProvider>
+      <Provider store={store}>
+        <AuthContextProvider>
+          <Routes />
+        </AuthContextProvider>
+      </Provider>
     );
   }
 };

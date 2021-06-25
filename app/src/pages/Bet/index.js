@@ -48,16 +48,18 @@ const Bet = () => {
     <>
       <BarStatus backgroundColor={colors.white_ice} />
       <Toast ref={(ref) => Toast.setRef(ref)} />
-      <Header cartIsVisible={numbersSelected.length > 0 && true} />
-      <Container>
-        <MakeBets
-          games={games}
-          currentGame={currentGame}
-          setCurrentGame={setCurrentGame}
-          numbersSelected={numbersSelected}
-          setNumbersSelected={setNumbersSelected}
-        />
-      </Container>
+      <>
+        <Header cartIsVisible={numbersSelected.length > 0 && true} />
+        <Container>
+          <MakeBets
+            games={games}
+            currentGame={currentGame}
+            setCurrentGame={setCurrentGame}
+            numbersSelected={numbersSelected}
+            setNumbersSelected={setNumbersSelected}
+          />
+        </Container>
+      </>
     </>
   );
 };
