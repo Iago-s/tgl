@@ -1,5 +1,5 @@
 import React from 'react';
-import { NumberButton, TextButton } from './styles';
+import { NumberButton, TextContainer, TextButton, Close } from './styles';
 
 const NumberGame = (props) => {
   const addNumber = (numberSelected) => {
@@ -21,8 +21,14 @@ const NumberGame = (props) => {
       onPress={() => addNumber(props.value)}
       isActived={props.numbersSelected.includes(props.value)}
       color={props.color}
+      small={props.small}
     >
-      <TextButton>{props.value}</TextButton>
+      <TextContainer>
+        <TextButton>{props.value}</TextButton>
+        {props.numbersSelected.includes(props.value) && props.close && (
+          <Close>x</Close>
+        )}
+      </TextContainer>
     </NumberButton>
   );
 };

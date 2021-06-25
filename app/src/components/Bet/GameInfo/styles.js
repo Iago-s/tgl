@@ -1,6 +1,6 @@
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import styled from 'styled-components/native';
-import colors from '../../styles/colors';
+import colors from '../../../styles/colors';
 
 export const Container = styled.View`
   margin-bottom: ${hp('2%')};
