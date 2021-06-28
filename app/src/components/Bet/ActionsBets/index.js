@@ -1,5 +1,8 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
+
+import { cartActions } from '../../../store/cart';
 
 import NumberGame from '../NumberGame';
 
@@ -17,6 +20,8 @@ const ActionsBets = ({
   currentGame,
   color,
 }) => {
+  const dispatch = useDispatch();
+
   const handleCompleteGame = () => {
     let ids = [];
     let random;
@@ -55,6 +60,36 @@ const ActionsBets = ({
     setNumbersSelected([]);
   };
 
+  const handleAddCart = () => {
+    if (
+      numbersSelected.length < currentGame.max_number ||
+      numbersSelected.length > currentGame.max_number
+    ) {
+      alert('numeros menores');
+
+      return;
+    }
+
+    let date = new Date();
+    let formatDate =
+      date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
+    dispatch(
+      cartActions.addCart({
+        game: {
+          id: new Date().getTime().toString(),
+          name: currentGame.type,
+          numbers: numbersSelected.sort((a, b) => a - b).join(','),
+          price: currentGame.price,
+          color: currentGame.color,
+          date: formatDate,
+        },
+      })
+    );
+
+    setNumbersSelected([]);
+  };
+
   return (
     <Container>
       <ScrollView
@@ -81,7 +116,7 @@ const ActionsBets = ({
         <Button small onPress={handleClearGame}>
           <TextButton>Clear game</TextButton>
         </Button>
-        <Button color={colors.green_avocado}>
+        <Button color={colors.green_avocado} onPress={handleAddCart}>
           <TextButton actived>Add to cart</TextButton>
         </Button>
       </ButtonActionsContainer>

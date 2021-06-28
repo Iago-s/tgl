@@ -6,6 +6,7 @@ import Header from '../../components/UI/Header';
 import Loading from '../../components/UI/Loading';
 
 import MakeBets from '../../components/Bet/MakeBets';
+import Cart from '../../components/Bet/Cart';
 
 import api from '../../services/api';
 import { AuthContext } from '../../contexts/AuthContext';
@@ -17,6 +18,8 @@ import colors from '../../styles/colors';
 const Bet = () => {
   const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+
+  const [showCart, setShowCart] = useState(false);
 
   const [games, setGames] = useState([]);
 
@@ -56,7 +59,11 @@ const Bet = () => {
       <BarStatus backgroundColor={colors.white_ice} />
       <Toast ref={(ref) => Toast.setRef(ref)} />
       <>
-        <Header cartIsVisible={numbersSelected.length > 0 && true} />
+        <Header
+          cartIsVisible={numbersSelected.length > 0 && true}
+          showCart={showCart}
+          setShowCart={setShowCart}
+        />
         <Container>
           {loading ? (
             <Loading />
@@ -67,9 +74,13 @@ const Bet = () => {
               setCurrentGame={setCurrentGame}
               numbersSelected={numbersSelected}
               setNumbersSelected={setNumbersSelected}
+              showCart={showCart}
             />
           )}
         </Container>
+        {showCart && (
+          <Cart setShowCart={setShowCart} currentGame={currentGame} />
+        )}
       </>
     </>
   );

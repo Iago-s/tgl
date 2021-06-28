@@ -35,7 +35,7 @@ export const TextButton = styled.Text`
 `;
 
 export const TitleUpperCase = styled.Text`
-  font-size: ${hp('3%')};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : hp('3%'))};
   font-family: 'HelveticaNeueBold';
   font-weight: bold;
   font-style: italic;
@@ -47,7 +47,7 @@ export const TitleUpperCase = styled.Text`
 `;
 
 export const Text = styled.Text`
-  font-size: ${hp('2%')};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : hp('2%'))};
   color: ${colors.gray_light};
   font-style: italic;
 `;

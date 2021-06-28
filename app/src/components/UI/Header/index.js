@@ -9,19 +9,21 @@ import Logo from '../Logo';
 import { Container, IconsContainer, Button } from './styles';
 import colors from '../../../styles/colors';
 
-const Header = ({ cartIsVisible }) => {
+const Header = ({ cartIsVisible, showCart, setShowCart }) => {
   const authContext = useContext(AuthContext);
 
   const handleLogout = () => {
     authContext.logout();
   };
 
+  const handleShowCart = () => setShowCart(!showCart);
+
   return (
     <Container>
       <Logo fontSize={hp('5%')} width={hp('10%')} height={hp('0.8%')} />
       <IconsContainer>
         {cartIsVisible && (
-          <Button>
+          <Button onPress={handleShowCart}>
             <Ionicons
               name="cart-outline"
               color={colors.green_avocado}
