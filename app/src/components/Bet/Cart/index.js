@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import Toast from 'react-native-toast-message';
 import { Ionicons } from '@expo/vector-icons';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 
+import api from '../../../services/api';
 import { cartActions } from '../../../store/cart';
 
+import Loading from '../../UI/Loading';
 import CartItem from './Item';
 
 import {
@@ -21,17 +26,27 @@ import {
 import { TitleUpperCase, Text } from '../../../styles/global';
 import colors from '../../../styles/colors';
 
-const Cart = ({ setShowCart, currentGame }) => {
+const Cart = ({ setShowCart, currentGame, setNumbersSelected, navigation }) => {
   const dispatch = useDispatch();
   const { games, totalPrice } = useSelector((state) => state.cart);
+
+  const [loading, setLoading] = useState(false);
 
   const handleRemoveItem = (itemId) => {
     dispatch(cartActions.removeCart({ id: itemId }));
   };
 
   const handleSaveGames = async () => {
+    setLoading(true);
+
     if (totalPrice < currentGame.min_cart_value) {
-      alert('Error carrinho');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: `Your cart must have a value equal to or greater than ${currentGame.min_cart_value}.`,
+      });
+
+      setLoading(false);
       return;
     }
 
@@ -49,9 +64,14 @@ const Cart = ({ setShowCart, currentGame }) => {
     try {
       await api.post('/bets', JSON.stringify(data));
 
+      setLoading(false);
+      setShowCart(false);
+      setNumbersSelected([]);
       dispatch(cartActions.resetCart());
+
+      navigation.navigate('Home');
     } catch (err) {
-      alert('Error catch');
+      setLoading(false);
     }
   };
 
@@ -90,7 +110,10 @@ const Cart = ({ setShowCart, currentGame }) => {
                   color={game.color}
                   numbers={game.numbers}
                   name={game.name}
-                  price={game.price}
+                  price={new Intl.NumberFormat('pt-br', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  }).format(game.price)}
                   date={game.date}
                 />
               ))
@@ -101,7 +124,12 @@ const Cart = ({ setShowCart, currentGame }) => {
             <TitleUpperCase>
               CART <Text fontSize={hp('3%')}>TOTAL:</Text>
             </TitleUpperCase>
-            <TitleUpperCase>{totalPrice}</TitleUpperCase>
+            <TitleUpperCase>
+              {new Intl.NumberFormat('pt-br', {
+                style: 'currency',
+                currency: 'BRL',
+              }).format(totalPrice)}
+            </TitleUpperCase>
           </TotalContainer>
         </CartInternContainer>
         <SaveButton onPress={handleSaveGames}>
@@ -114,6 +142,7 @@ const Cart = ({ setShowCart, currentGame }) => {
             />
           </SaveButtonText>
         </SaveButton>
+        {loading && <Loading />}
       </CartContainer>
     </Container>
   );

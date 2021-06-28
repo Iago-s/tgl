@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { ScrollView } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 import { cartActions } from '../../../store/cart';
 
@@ -14,12 +15,7 @@ import {
 } from './styles';
 import colors from '../../../styles/colors';
 
-const ActionsBets = ({
-  numbersSelected,
-  setNumbersSelected,
-  currentGame,
-  color,
-}) => {
+const ActionsBets = ({ numbersSelected, setNumbersSelected, currentGame }) => {
   const dispatch = useDispatch();
 
   const handleCompleteGame = () => {
@@ -65,7 +61,12 @@ const ActionsBets = ({
       numbersSelected.length < currentGame.max_number ||
       numbersSelected.length > currentGame.max_number
     ) {
-      alert('numeros menores');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: `For this bet you must choose ${currentGame.max_number} numbers!`,
+        position: 'bottom',
+      });
 
       return;
     }
@@ -105,7 +106,7 @@ const ActionsBets = ({
             numbersSelected={numbersSelected}
             setNumbersSelected={setNumbersSelected}
             value={item}
-            color={color}
+            color={currentGame.color}
           />
         ))}
       </ScrollView>

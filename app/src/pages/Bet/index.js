@@ -15,7 +15,7 @@ import { Container } from './styles';
 
 import colors from '../../styles/colors';
 
-const Bet = () => {
+const Bet = ({ navigation }) => {
   const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
@@ -57,7 +57,7 @@ const Bet = () => {
   return (
     <>
       <BarStatus backgroundColor={colors.white_ice} />
-      <Toast ref={(ref) => Toast.setRef(ref)} />
+      <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 999 }} />
       <>
         <Header
           cartIsVisible={numbersSelected.length > 0 && true}
@@ -79,7 +79,12 @@ const Bet = () => {
           )}
         </Container>
         {showCart && (
-          <Cart setShowCart={setShowCart} currentGame={currentGame} />
+          <Cart
+            setShowCart={setShowCart}
+            currentGame={currentGame}
+            setNumbersSelected={setNumbersSelected}
+            navigation={navigation}
+          />
         )}
       </>
     </>

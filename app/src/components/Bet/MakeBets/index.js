@@ -65,7 +65,6 @@ const MakeBets = ({
               numbersSelected={numbersSelected}
               setNumbersSelected={setNumbersSelected}
               currentGame={currentGame}
-              color={currentGame.color}
             />
           )}
 

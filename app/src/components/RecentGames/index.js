@@ -1,4 +1,6 @@
 import React from 'react';
+import 'intl';
+import 'intl/locale-data/jsonp/pt-BR';
 
 import { GamesList, GameContainer, GameText, GameName } from './styles';
 
@@ -8,10 +10,10 @@ const Game = ({ name, numbers, price, date, color }) => {
       <GameText bold>{numbers}</GameText>
       <GameText>
         {date} - (
-        {price.toLocaleString('pt-br', {
+        {new Intl.NumberFormat('pt-br', {
           style: 'currency',
           currency: 'BRL',
-        })}
+        }).format(price)}
         )
       </GameText>
       <GameName color={color}>{name}</GameName>
