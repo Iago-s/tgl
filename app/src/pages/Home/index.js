@@ -3,6 +3,7 @@ import Toast from 'react-native-toast-message';
 
 import BarStatus from '../../components/UI/BarStatus';
 import Header from '../../components/UI/Header';
+import Loading from '../../components/UI/Loading';
 import RecentGames from '../../components/RecentGames';
 import FilteredGamesButton from '../../components/FilteredGamesButton';
 
@@ -19,6 +20,7 @@ import colors from '../../styles/colors';
 
 const Home = () => {
   const authContext = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const [bets, setBets] = useState([]);
   const [types, setTypes] = useState([]);
@@ -49,12 +51,16 @@ const Home = () => {
 
   useEffect(() => {
     const getBets = async () => {
+      setLoading(true);
       try {
         const response = await api.get('/bets');
 
         setBets(response.data);
         setFilteredGames(response.data);
+
+        setLoading(false);
       } catch (err) {
+        setLoading(false);
         console.log('Error bets');
       }
     };
@@ -80,36 +86,42 @@ const Home = () => {
       <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 999 }} />
       <Header />
       <Container>
-        <TitleUpperCase>Recent games</TitleUpperCase>
-
-        {bets.length > 0 && (
-          <>
-            <Text onPress={handleResetFilter}>Filters</Text>
-            <ButtonGamesContainer>
-              {types.map((item, index) => (
-                <FilteredGamesButton
-                  key={item.id}
-                  color={item.color}
-                  type={item.type}
-                  onChangeGame={() => {
-                    handleFilterGame(item.type);
-                  }}
-                  isActived={
-                    filteredGames[0]?.type === item.type ? true : false
-                  }
-                  currentGame={currentGame}
-                />
-              ))}
-            </ButtonGamesContainer>
-          </>
-        )}
-
-        {bets.length === 0 ? (
-          <Text>Make your first game.</Text>
-        ) : filteredGames.length === 0 ? (
-          <Text>You haven't made any bets of this type yet</Text>
+        {loading ? (
+          <Loading />
         ) : (
-          <RecentGames bets={filteredGames} />
+          <>
+            <TitleUpperCase>Recent games</TitleUpperCase>
+
+            {bets.length > 0 && (
+              <>
+                <Text onPress={handleResetFilter}>Filters</Text>
+                <ButtonGamesContainer>
+                  {types.map((item, index) => (
+                    <FilteredGamesButton
+                      key={item.id}
+                      color={item.color}
+                      type={item.type}
+                      onChangeGame={() => {
+                        handleFilterGame(item.type);
+                      }}
+                      isActived={
+                        filteredGames[0]?.type === item.type ? true : false
+                      }
+                      currentGame={currentGame}
+                    />
+                  ))}
+                </ButtonGamesContainer>
+              </>
+            )}
+
+            {bets.length === 0 ? (
+              <Text>Make your first game.</Text>
+            ) : filteredGames.length === 0 ? (
+              <Text>You haven't made any bets of this type yet</Text>
+            ) : (
+              <RecentGames bets={filteredGames} />
+            )}
+          </>
         )}
       </Container>
     </>

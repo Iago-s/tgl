@@ -34,43 +34,40 @@ const Authentication = ({ navigation }) => {
   return (
     <>
       <BarStatus backgroundColor={colors.white} />
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <Container>
-            <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 999 }} />
-            <KeyboardAvoidingView>
-              {visible && <Logo />}
-              {display.auth && (
-                <AuthForm
-                  setDisplay={setDisplay}
-                  setLoading={setLoading}
-                  visible={visible}
-                  navigation={navigation}
-                />
-              )}
-              {display.register && (
-                <RegisterForm
-                  setDisplay={setDisplay}
-                  setLoading={setLoading}
-                  visible={visible}
-                  navigation={navigation}
-                />
-              )}
-              {display.reset && (
-                <ResetPasswordForm
-                  setDisplay={setDisplay}
-                  setLoading={setLoading}
-                  visible={visible}
-                  navigation={navigation}
-                />
-              )}
-            </KeyboardAvoidingView>
-          </Container>
-          {visible && <Footer />}
-        </>
-      )}
+      <>
+        <Container>
+          <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 999 }} />
+          <KeyboardAvoidingView>
+            {visible && <Logo />}
+            {display.auth && (
+              <AuthForm
+                setDisplay={setDisplay}
+                setLoading={setLoading}
+                visible={visible}
+                navigation={navigation}
+              />
+            )}
+            {display.register && (
+              <RegisterForm
+                setDisplay={setDisplay}
+                setLoading={setLoading}
+                visible={visible}
+                navigation={navigation}
+              />
+            )}
+            {display.reset && (
+              <ResetPasswordForm
+                setDisplay={setDisplay}
+                setLoading={setLoading}
+                visible={visible}
+                navigation={navigation}
+              />
+            )}
+          </KeyboardAvoidingView>
+        </Container>
+        {visible && <Footer />}
+      </>
+      {loading && <Loading />}
     </>
   );
 };

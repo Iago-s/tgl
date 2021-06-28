@@ -3,6 +3,7 @@ import Toast from 'react-native-toast-message';
 
 import BarStatus from '../../components/UI/BarStatus';
 import Header from '../../components/UI/Header';
+import Loading from '../../components/UI/Loading';
 
 import MakeBets from '../../components/Bet/MakeBets';
 
@@ -15,6 +16,7 @@ import colors from '../../styles/colors';
 
 const Bet = () => {
   const authContext = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const [games, setGames] = useState([]);
 
@@ -24,11 +26,16 @@ const Bet = () => {
   useEffect(() => {
     const getGames = async () => {
       try {
+        setLoading(true);
         const response = await api.get('/games');
 
         setGames(response.data);
         setCurrentGame(response.data.length !== 0 ? response.data[0] : []);
+
+        setLoading(false);
       } catch (err) {
+        setLoading(false);
+
         Toast.show({
           type: 'error',
           text1: 'Error',
@@ -51,13 +58,17 @@ const Bet = () => {
       <>
         <Header cartIsVisible={numbersSelected.length > 0 && true} />
         <Container>
-          <MakeBets
-            games={games}
-            currentGame={currentGame}
-            setCurrentGame={setCurrentGame}
-            numbersSelected={numbersSelected}
-            setNumbersSelected={setNumbersSelected}
-          />
+          {loading ? (
+            <Loading />
+          ) : (
+            <MakeBets
+              games={games}
+              currentGame={currentGame}
+              setCurrentGame={setCurrentGame}
+              numbersSelected={numbersSelected}
+              setNumbersSelected={setNumbersSelected}
+            />
+          )}
         </Container>
       </>
     </>
