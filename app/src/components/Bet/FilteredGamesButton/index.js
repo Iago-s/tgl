@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GameButton, GameButtonText } from '../../styles/global';
+import { GameButton, GameButtonText } from '../../../styles/global';
 
 const FilteredGamesButton = ({ color, onChangeGame, type, currentGame }) => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
 
-import FilteredGamesButton from '../../FilteredGamesButton';
+import FilteredGamesButton from '../FilteredGamesButton';
 
 import GameInfo from '../GameInfo';
 import NumberGame from '../NumberGame';

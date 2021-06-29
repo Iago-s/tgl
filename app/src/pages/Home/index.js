@@ -5,8 +5,8 @@ import Toast from 'react-native-toast-message';
 import BarStatus from '../../components/UI/BarStatus';
 import Header from '../../components/UI/Header';
 import Loading from '../../components/UI/Loading';
-import RecentGames from '../../components/RecentGames';
-import FilteredGamesButton from '../../components/FilteredGamesButton';
+import RecentGames from '../../components/Home/RecentGames';
+import FilteredGamesButton from '../../components/Bet/FilteredGamesButton';
 
 import { AuthContext } from '../../contexts/AuthContext';
 import api from '../../services/api';
