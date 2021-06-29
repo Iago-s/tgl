@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 import { AuthContext } from '../../../contexts/AuthContext';
+import { cartActions } from '../../../store/cart';
 
 import Logo from '../Logo';
 
@@ -11,9 +13,11 @@ import colors from '../../../styles/colors';
 
 const Header = ({ cartIsVisible, showCart, setShowCart }) => {
   const authContext = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     authContext.logout();
+    dispatch(cartActions.resetCart());
   };
 
   const handleShowCart = () => setShowCart(!showCart);

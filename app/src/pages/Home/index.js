@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
 
 import BarStatus from '../../components/UI/BarStatus';
@@ -19,6 +20,8 @@ import {
 import colors from '../../styles/colors';
 
 const Home = () => {
+  const { games } = useSelector((state) => state.cart);
+
   const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
@@ -50,23 +53,23 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const getBets = async () => {
-      setLoading(true);
-      try {
-        const response = await api.get('/bets');
-
-        setBets(response.data);
-        setFilteredGames(response.data);
-
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        console.log('Error bets');
-      }
-    };
-
     getBets();
-  }, []);
+  }, [games]);
+
+  const getBets = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const response = await api.get('/bets');
+
+      setBets(response.data);
+      setFilteredGames(response.data);
+
+      setLoading(false);
+    } catch (err) {
+      setLoading(false);
+    }
+  });
 
   const handleFilterGame = async (type) => {
     const newGames = bets.filter((game) => game.type === type);
