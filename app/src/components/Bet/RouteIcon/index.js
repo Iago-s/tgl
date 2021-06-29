@@ -1,16 +1,14 @@
 import React from 'react';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
-import { View, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { View, StyleSheet, Image } from 'react-native';
 import colors from '../../../styles/colors';
+
+import icon from '../../../assets/icon.png';
 
 const RouteIcon = () => {
   return (
     <View style={styles.iconTabRound}>
-      <Ionicons name="add" size={hp('5%')} color="#FFF" />
+      <Image source={icon} style={{ width: hp('5%'), height: hp('5%') }} />
     </View>
   );
 };
