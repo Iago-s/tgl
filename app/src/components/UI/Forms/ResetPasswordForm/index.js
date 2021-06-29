@@ -4,15 +4,18 @@ import Toast from 'react-native-toast-message';
 import { Ionicons } from '@expo/vector-icons';
 
 import Input from '../../Input';
+import UpdatePasswordForm from './UpdatePasswordForm';
 
 import api from '../../../../services/api';
 import { isInvalidMail } from '../../../../utils/invalidInput';
 
-import { Form } from '../styles';
+import { Form, ForgotPassword } from '../styles';
 import { Title, Button, TextButton } from '../../../../styles/global';
 import colors from '../../../../styles/colors';
 
 const ResetPasswordForm = ({ setDisplay, setLoading, visible }) => {
+  const [hasToken, setHasToken] = useState(false);
+
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState(false);
 
@@ -32,6 +35,16 @@ const ResetPasswordForm = ({ setDisplay, setLoading, visible }) => {
 
         setLoading(false);
         setEmail('');
+        setTimeout(() => {
+          setHasToken(true);
+        }, 4000);
+
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2:
+            'We send you an email, follow the step by step to recover your password.',
+        });
       } catch (err) {
         setLoading(false);
 
@@ -64,47 +77,63 @@ const ResetPasswordForm = ({ setDisplay, setLoading, visible }) => {
     return;
   };
 
+  const handleHasToken = () => setHasToken(true);
+
   return (
     <>
-      <Title>Reset password</Title>
-      <Form>
-        <Input
-          label="E-mail"
-          placeholder="Your email"
-          value={email}
-          setValue={setEmail}
-          hasError={emailError}
-          setHasError={setEmailError}
+      {hasToken ? (
+        <UpdatePasswordForm
+          setLoading={setLoading}
+          setDisplay={setDisplay}
+          visible={visible}
+          setHasToken={setHasToken}
         />
-        <Button onPress={handleResetPassword}>
-          <TextButton>
-            Send Link{' '}
-            <Ionicons
-              name="arrow-forward-outline"
-              size={hp('4%')}
-              color={colors.green_avocado}
+      ) : (
+        <>
+          <Title>Reset password</Title>
+          <Form>
+            <Input
+              label="E-mail"
+              placeholder="Your email"
+              value={email}
+              setValue={setEmail}
+              hasError={emailError}
+              setHasError={setEmailError}
             />
-          </TextButton>
-        </Button>
-      </Form>
+            <ForgotPassword onPress={handleHasToken}>
+              I have a token
+            </ForgotPassword>
+            <Button onPress={handleResetPassword}>
+              <TextButton>
+                Send Link{' '}
+                <Ionicons
+                  name="arrow-forward-outline"
+                  size={hp('4%')}
+                  color={colors.green_avocado}
+                />
+              </TextButton>
+            </Button>
+          </Form>
 
-      {visible && (
-        <Title
-          onPress={() =>
-            setDisplay({
-              auth: true,
-              register: false,
-              reset: false,
-            })
-          }
-        >
-          <Ionicons
-            name="arrow-back-outline"
-            size={hp('4%')}
-            color={colors.gray}
-          />{' '}
-          Back
-        </Title>
+          {visible && (
+            <Title
+              onPress={() =>
+                setDisplay({
+                  auth: true,
+                  register: false,
+                  reset: false,
+                })
+              }
+            >
+              <Ionicons
+                name="arrow-back-outline"
+                size={hp('4%')}
+                color={colors.gray}
+              />{' '}
+              Back
+            </Title>
+          )}
+        </>
       )}
     </>
   );
