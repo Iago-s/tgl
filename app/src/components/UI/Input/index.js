@@ -9,11 +9,13 @@ const Input = ({
   setValue,
   hasError,
   setHasError,
+  editable = true,
 }) => {
   return (
     <>
       <Label>{label}</Label>
       <Field
+        editable={editable}
         placeholder={placeholder}
         value={value}
         onChangeText={(value) => {

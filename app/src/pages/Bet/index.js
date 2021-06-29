@@ -59,11 +59,7 @@ const Bet = ({ navigation }) => {
       <BarStatus backgroundColor={colors.white_ice} />
       <Toast ref={(ref) => Toast.setRef(ref)} style={{ zIndex: 999 }} />
       <>
-        <Header
-          cartIsVisible={numbersSelected.length > 0 && true}
-          showCart={showCart}
-          setShowCart={setShowCart}
-        />
+        <Header cartIsVisible showCart={showCart} setShowCart={setShowCart} />
         <Container>
           {loading ? (
             <Loading />
