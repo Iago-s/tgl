@@ -70,11 +70,6 @@ const Home = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
-      Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'An error has occurred. The problem is with us, do not worry!',
-      });
 
       dispatch(cartActions.resetCart());
       setTimeout(() => {
