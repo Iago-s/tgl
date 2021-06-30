@@ -22,6 +22,7 @@ class ForgotPasswordController {
         ['home'],
         {
           link: `${request.input('redirect_url')}${user.token}`,
+          token: user.token,
           path: 'emails/forgot-password',
         },
         (message) => {
