@@ -66,10 +66,9 @@ const ResetPasswordForm = ({ setDisplay, setLoading, visible }) => {
         }
 
         Toast.show({
-          type: 'success',
-          text1: 'Success',
-          text2:
-            'We send you an email, follow the step by step to recover your password.',
+          type: 'error',
+          text1: 'Error',
+          text2: 'An error has occurred. The problem is with us, do not worry!',
         });
       }
     }

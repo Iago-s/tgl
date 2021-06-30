@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
 
 import BarStatus from '../../components/UI/BarStatus';
@@ -10,12 +11,14 @@ import Cart from '../../components/Bet/Cart';
 
 import api from '../../services/api';
 import { AuthContext } from '../../contexts/AuthContext';
+import { cartActions } from '../../store/cart';
 
 import { Container } from './styles';
 
 import colors from '../../styles/colors';
 
 const Bet = ({ navigation }) => {
+  const dispatch = useDispatch();
   const authContext = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 
@@ -45,6 +48,7 @@ const Bet = ({ navigation }) => {
           text2: 'An error has occurred. The problem is with us, do not worry!',
         });
 
+        dispatch(cartActions.resetCart());
         setTimeout(() => {
           authContext.logout();
         }, 5000);

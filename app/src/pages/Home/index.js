@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
 
 import BarStatus from '../../components/UI/BarStatus';
@@ -9,6 +9,7 @@ import RecentGames from '../../components/Home/RecentGames';
 import FilteredGamesButton from '../../components/Bet/FilteredGamesButton';
 
 import { AuthContext } from '../../contexts/AuthContext';
+import { cartActions } from '../../store/cart';
 import api from '../../services/api';
 
 import { Container } from './styles';
@@ -20,6 +21,7 @@ import {
 import colors from '../../styles/colors';
 
 const Home = () => {
+  const dispatch = useDispatch();
   const { games } = useSelector((state) => state.cart);
 
   const authContext = useContext(AuthContext);
@@ -68,6 +70,16 @@ const Home = () => {
       setLoading(false);
     } catch (err) {
       setLoading(false);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'An error has occurred. The problem is with us, do not worry!',
+      });
+
+      dispatch(cartActions.resetCart());
+      setTimeout(() => {
+        authContext.logout();
+      }, 5000);
     }
   });
 
