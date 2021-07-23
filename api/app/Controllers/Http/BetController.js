@@ -1,11 +1,25 @@
 'use strict';
 
+const { Kafka, logLevel } = require('kafkajs');
+
 const Bet = use('App/Models/Bet');
 
 const Mail = use('Mail');
 const Env = use('Env');
 
 class BetController {
+  producer;
+
+  constructor() {
+    const kafka = new Kafka({
+      clientId: 'api',
+      brokers: ['localhost:9092'],
+      logLevel: logLevel.WARN,
+    });
+
+    this.producer = kafka.producer();
+  }
+
   async index({ request, auth }) {
     /*const { page } = request.get();
     const { filter } = request.all();
@@ -35,6 +49,12 @@ class BetController {
 
     try {
       await Bet.createMany(formatedBets);
+
+      await this.producer.connect();
+      await this.producer.send({
+        topic: 'email',
+        messages: [{ value: auth.user.email }],
+      });
 
       await Mail.send(['home'], { path: 'emails/new-bet' }, (message) => {
         message
