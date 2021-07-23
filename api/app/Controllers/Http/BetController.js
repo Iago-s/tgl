@@ -1,6 +1,6 @@
 'use strict';
 
-const { Kafka, logLevel } = require('kafkajs');
+const KafkaProducer = require('../../Services/Kafka');
 
 const Bet = use('App/Models/Bet');
 
@@ -50,8 +50,9 @@ class BetController {
     try {
       await Bet.createMany(formatedBets);
 
-      await this.producer.connect();
-      await this.producer.send({
+      const producer = new KafkaProducer();
+
+      await producer.produce({
         topic: 'email',
         messages: [{ value: auth.user.email }],
       });
